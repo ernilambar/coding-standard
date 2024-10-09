@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="NilambarCodingStandard" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/squizlabs/PHP_CodeSniffer/master/phpcs.xsd">
+
+	<description>Nilambar coding standards</description>
+
+	<rule ref="NilambarCodingStandard.CodeAnalysis.UnfilteredUploads" />
+	<rule ref="NilambarCodingStandard.Commenting.TodoComment" />
+
+</ruleset>
