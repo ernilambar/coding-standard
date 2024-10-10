@@ -72,7 +72,7 @@ final class SettingSanitizationSniff implements Sniff {
 				// Check the third parameter.
 				$thirdTokenType = $tokens[ $thirdParamStart ]['code'];
 
-				if ( ! in_array( $thirdTokenType, [ T_CONSTANT_ENCAPSED_STRING, T_STRING, T_ARRAY, T_OPEN_SHORT_ARRAY ], true ) ) {
+				if ( ! in_array( $thirdTokenType, [ T_CONSTANT_ENCAPSED_STRING, T_STRING, T_ARRAY, T_OPEN_SHORT_ARRAY, T_VARIABLE ], true ) ) {
 						$error = 'Invalid sanitization in third parameter of register_setting().';
 						$phpcsFile->addError( $error, $stackPtr, 'Invalid' );
 				}
