@@ -8,6 +8,7 @@
 namespace NilambarCodingStandard\Sniffs\Security;
 
 use PHPCSUtils\Utils\PassedParameters;
+use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
@@ -60,9 +61,9 @@ final class SettingSanitizationSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
-		$third_token_type = $this->tokens[ $third_param['start'] + 1 ]['code'];
+		$content = TextStrings::stripQuotes( $third_param['clean'] );
 
-		if ( ! in_array( $third_token_type, [ T_CONSTANT_ENCAPSED_STRING, T_STRING, T_ARRAY, T_OPEN_SHORT_ARRAY, T_VARIABLE ], true ) ) {
+		if ( is_numeric( $content ) || in_array( strtolower( $content ), [ 'true', 'false' ], true ) ) {
 			$error = 'Invalid sanitization in third parameter of register_setting().';
 			$this->phpcsFile->addError( $error, $stackPtr, 'Invalid' );
 		}
