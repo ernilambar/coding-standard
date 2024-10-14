@@ -17,3 +17,13 @@ $obj = new TestClass();
 $obj->register_setting(); // Good.
 
 register_setting( 'my_options_group' ); // Bad.
+
+register_setting('my_options_group', 'my_option_name',array(&$this,'validate')); // Good.
+
+register_setting(
+		'my_options_group',
+		$setting_key,
+		array(
+				'sanitize_callback' => $setting['sanitize_callback']
+		)
+); // Good.
