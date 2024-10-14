@@ -3,7 +3,7 @@
 
 	<description>Nilambar coding standards</description>
 
-	<rule ref="NilambarCodingStandard.CodeAnalysis.UnfilteredUploads" />
+	<rule ref="NilambarCodingStandard.CodeAnalysis.RestrictedConstants" />
 	<rule ref="NilambarCodingStandard.Commenting.TodoComment" />
 	<rule ref="NilambarCodingStandard.Security.SettingSanitization" />
 

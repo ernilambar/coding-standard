@@ -1,20 +1,20 @@
 <?php
 /**
- * Unit tests for UnfilteredUploadsSniff.
+ * Unit tests for RestrictedConstantsSniff.
  *
  * @package Nilambar_Coding_Standard
  */
 
 namespace NilambarCodingStandard\Tests\CodeAnalysis;
 
-use NilambarCodingStandard\Sniffs\CodeAnalysis\UnfilteredUploadsSniff;
+use NilambarCodingStandard\Sniffs\CodeAnalysis\RestrictedConstantsSniff;
 use NilambarCodingStandard\Tests\AbstractSniffUnitTest;
 use PHP_CodeSniffer\Sniffs\Sniff;
 
 /**
- * Unit tests for UnfilteredUploadsSniff.
+ * Unit tests for RestrictedConstantsSniff.
  */
-final class UnfilteredUploadsUnitTest extends AbstractSniffUnitTest {
+final class RestrictedConstantsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -45,7 +45,7 @@ final class UnfilteredUploadsUnitTest extends AbstractSniffUnitTest {
 	 * @return string The fully qualified class name of the sniff.
 	 */
 	protected function get_sniff_fqcn() {
-		return UnfilteredUploadsSniff::class;
+		return RestrictedConstantsSniff::class;
 	}
 
 	/**
