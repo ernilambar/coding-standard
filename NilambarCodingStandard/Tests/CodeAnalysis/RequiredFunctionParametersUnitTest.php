@@ -1,20 +1,20 @@
 <?php
 /**
- * Unit tests for LocalhostSniff.
+ * Unit tests for RequiredFunctionParametersSniff.
  *
  * @package Nilambar_Coding_Standard
  */
 
 namespace NilambarCodingStandard\Tests\CodeAnalysis;
 
-use NilambarCodingStandard\Sniffs\CodeAnalysis\LocalhostSniff;
+use NilambarCodingStandard\Sniffs\CodeAnalysis\RequiredFunctionParametersSniff;
 use NilambarCodingStandard\Tests\AbstractSniffUnitTest;
 use PHP_CodeSniffer\Sniffs\Sniff;
 
 /**
- * Unit tests for LocalhostSniff.
+ * Unit tests for RequiredFunctionParametersSniff.
  */
-final class LocalhostUnitTest extends AbstractSniffUnitTest {
+final class RequiredFunctionParametersUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -23,20 +23,9 @@ final class LocalhostUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return [
-			3  => 1,
 			4  => 1,
-			5  => 1,
-			6  => 1,
 			8  => 1,
-			9  => 1,
-			10 => 1,
 			11 => 1,
-			15 => 1,
-			27 => 1,
-			32 => 1,
-			38 => 2,
-			41 => 1,
-			43 => 1,
 		];
 	}
 
@@ -55,7 +44,7 @@ final class LocalhostUnitTest extends AbstractSniffUnitTest {
 	 * @return string The fully qualified class name of the sniff.
 	 */
 	protected function get_sniff_fqcn() {
-		return LocalhostSniff::class;
+		return RequiredFunctionParametersSniff::class;
 	}
 
 	/**
