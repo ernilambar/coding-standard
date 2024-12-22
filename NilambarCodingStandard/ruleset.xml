@@ -5,6 +5,7 @@
 
 	<rule ref="NilambarCodingStandard.CodeAnalysis.RequiredFunctionParameters" />
 	<rule ref="NilambarCodingStandard.CodeAnalysis.RestrictedConstants" />
+	<rule ref="NilambarCodingStandard.Commenting.AllCapsComment" />
 	<rule ref="NilambarCodingStandard.Commenting.TodoComment" />
 	<rule ref="NilambarCodingStandard.Security.SettingSanitization" />
 
