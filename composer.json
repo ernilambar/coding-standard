@@ -16,7 +16,7 @@
     }
   ],
   "require": {
-    "php": ">=7.2.24",
+    "php": ">=7.4",
     "ext-libxml": "*",
     "ext-tokenizer": "*",
     "ext-xmlreader": "*",
@@ -34,7 +34,7 @@
       "ergebnis/composer-normalize": true
     },
     "platform": {
-      "php": "7.2.24"
+      "php": "7.4"
     }
   },
   "scripts": {
