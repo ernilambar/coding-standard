@@ -9,6 +9,7 @@ namespace NilambarCodingStandard\Sniffs\Commenting;
 
 use NilambarCodingStandard\Traits\CommentTag;
 use NilambarCodingStandard\Traits\GetEntityName;
+use NilambarCodingStandard\Traits\Version;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 
@@ -21,6 +22,7 @@ final class SinceTagSniff implements Sniff {
 
 	use CommentTag;
 	use GetEntityName;
+	use Version;
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -65,6 +67,34 @@ final class SinceTagSniff implements Sniff {
 				),
 				$stackPtr,
 				'Missing'
+			);
+
+			return;
+		}
+
+		// Tag @since should have a version number.
+		if ( ! $this->has_version( $since, $tokens ) ) {
+			$phpcsFile->addError(
+				sprintf(
+					'Missing @since version for %s.',
+					$entity
+				),
+				$since['tag'],
+				'MissingVersion'
+			);
+
+			return;
+		}
+
+		// Check for valid version for @since tag.
+		if ( ! $this->is_valid_version( $since, $tokens ) ) {
+			$phpcsFile->addError(
+				sprintf(
+					'Invalid @since version for %s.',
+					$entity
+				),
+				$since['tag'],
+				'InvalidVersion'
 			);
 
 			return;

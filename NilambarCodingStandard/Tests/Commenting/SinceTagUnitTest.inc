@@ -27,3 +27,19 @@ trait MyTrait {
 interface MyInterface {
   public function myMethod();
 }
+
+/**
+ * Function one.
+ *
+ * @since
+ */
+function function_one() {
+}
+
+/**
+ * Function two.
+ *
+ * @since invalid version
+ */
+function function_two() {
+}
