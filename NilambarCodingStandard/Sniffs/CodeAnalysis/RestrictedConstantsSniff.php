@@ -7,16 +7,11 @@
 
 namespace NilambarCodingStandard\Sniffs\CodeAnalysis;
 
-use PHP_CodeSniffer\Exceptions\RuntimeException;
-use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\MessageHelper;
-use PHPCSUtils\Tokens\Collections;
-use PHPCSUtils\Utils\TextStrings;
-use PHP_CodeSniffer\Sniffs\Sniff;
 use PHPCSUtils\Utils\PassedParameters;
+use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
-use WordPressCS\WordPress\Helpers\ConstantsHelper;
 
 /**
  * Detect restricted define variables.
