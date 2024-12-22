@@ -43,3 +43,38 @@ function function_one() {
  */
 function function_two() {
 }
+
+/**
+ * Function three.
+ *
+ * @since 1.0.0
+ *
+ * @param int $id
+ */
+function function_three() {
+}
+
+/**
+ * Function four.
+ *
+ * @since 1.0.0
+ * @return void
+ */
+function function_four() {
+}
+
+/**
+ * Function five.
+ *
+ * @see text
+ * @since 1.0.0
+ */
+function function_five() {
+}
+
+/**
+ * Function six.
+ * @since 1.0.0
+ */
+function function_six() {
+}

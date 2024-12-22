@@ -99,5 +99,48 @@ final class SinceTagSniff implements Sniff {
 
 			return;
 		}
+
+		$this->tag_spacing( $phpcsFile, $stackPtr, $since );
+	}
+
+	/**
+	 * Processes and detect empty line between tags.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param File  $phpcsFile The PHP_CodeSniffer file where the token was found.
+	 * @param int   $stackPtr  The position in the PHP_CodeSniffer file's token stack where the token was found.
+	 * @param array $since     Since tag token.
+	 *
+	 * @return void
+	 */
+	private function tag_spacing( $phpcsFile, $stackPtr, $since ) {
+		$tokens         = $phpcsFile->getTokens();
+		$entity         = $this->get_entity_full_name( $phpcsFile, $stackPtr, $tokens );
+		$nextAnnotation = $phpcsFile->findNext( T_DOC_COMMENT_TAG, $since['tag'] + 1 );
+		$commentEnd     = $phpcsFile->findPrevious( T_DOC_COMMENT_CLOSE_TAG, $stackPtr );
+		$nextAnnotation = $nextAnnotation && $tokens[ $commentEnd ]['line'] > $tokens[ $nextAnnotation ]['line'] ? $nextAnnotation : false;
+
+		if ( ! $this->has_empty_line_before_tag( $phpcsFile, $since ) ) {
+			$phpcsFile->addError(
+				sprintf(
+					'Empty line missing before @since tag for %s.',
+					$entity
+				),
+				$since['tag'],
+				'MissingEmptyLineBeforeSince'
+			);
+		}
+
+		if ( ! $this->is_last_tag( $phpcsFile, $since ) && ! $this->has_empty_line_after_tag( $phpcsFile, $since ) ) {
+			$phpcsFile->addError(
+				sprintf(
+					'Empty line missing after @since tag for %s.',
+					$entity
+				),
+				$since['tag'],
+				'MissingEmptyLineAfterSince'
+			);
+		}
 	}
 }
