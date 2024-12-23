@@ -238,9 +238,41 @@ final class SinceTagSniff implements Sniff {
 		$previousLineFirstTokenPtr = $this->get_previous_line_first_token( $phpcsFile, $stackPtr );
 
 		if ( false !== $previousLineFirstTokenPtr ) {
-				$previousLineContent = $phpcsFile->getTokensAsString( $previousLineFirstTokenPtr, $stackPtr - $previousLineFirstTokenPtr );
+			$lineContent = $phpcsFile->getTokensAsString( $previousLineFirstTokenPtr, $stackPtr - $previousLineFirstTokenPtr );
 
-				return trim( $previousLineContent );
+			return trim( $lineContent );
+		}
+
+		return '';
+	}
+
+	/**
+	 * Returns content of the next line.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The position of the current token in the stack.
+	 * @return string The content of the next line, or an empty string if there's no next line.
+	 */
+	private function get_next_line_content( File $phpcsFile, int $stackPtr ): string {
+		$nextLineFirstTokenPtr = $this->get_next_line_first_token( $phpcsFile, $stackPtr );
+
+		if ( false !== $nextLineFirstTokenPtr ) {
+			$tokens      = $phpcsFile->getTokens();
+			$totalTokens = count( $tokens );
+			$nextLine    = $tokens[ $nextLineFirstTokenPtr ]['line'];
+
+			// Determine the last token of the next line.
+			$nextLineLastTokenPtr = $nextLineFirstTokenPtr;
+			while ( $nextLineLastTokenPtr < $totalTokens - 1 && $tokens[ $nextLineLastTokenPtr + 1 ]['line'] === $nextLine ) {
+				++$nextLineLastTokenPtr;
+			}
+
+			// Get the content of the next line as a string.
+			$lineContent = $phpcsFile->getTokensAsString( $nextLineFirstTokenPtr, $nextLineLastTokenPtr - $nextLineFirstTokenPtr + 1 );
+
+			return trim( $lineContent );
 		}
 
 		return '';
@@ -255,7 +287,7 @@ final class SinceTagSniff implements Sniff {
 	 * @param int  $stackPtr The position of the current token in the stack.
 	 * @return int|false The position of the first token on the previous line, or false if there is no previous line.
 	 */
-	private function get_previous_line_first_token( File $phpcsFile, $stackPtr ) {
+	private function get_previous_line_first_token( File $phpcsFile, int $stackPtr ) {
 		$tokens      = $phpcsFile->getTokens();
 		$currentLine = $tokens[ $stackPtr ]['line'];
 
@@ -268,6 +300,34 @@ final class SinceTagSniff implements Sniff {
 		// Now find the first token on the previous line.
 		if ( $prevPtr > 0 ) {
 			return $phpcsFile->findFirstOnLine( [], $prevPtr, true );
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get the first token of the next line.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The position of the current token in the stack.
+	 * @return int|false The position of the first token on the next line, or false if there is no next line.
+	 */
+	private function get_next_line_first_token( File $phpcsFile, int $stackPtr ) {
+		$tokens      = $phpcsFile->getTokens();
+		$currentLine = $tokens[ $stackPtr ]['line'];
+		$totalTokens = count( $tokens );
+
+		// Advance to reach the next line.
+		$nextPtr = $stackPtr;
+		while ( $nextPtr < $totalTokens - 1 && $tokens[ $nextPtr ]['line'] === $currentLine ) {
+			++$nextPtr;
+		}
+
+		// Now find the first token on the next line.
+		if ( $nextPtr < $totalTokens && $tokens[ $nextPtr ]['line'] !== $currentLine ) {
+			return $phpcsFile->findFirstOnLine( [], $nextPtr, true );
 		}
 
 		return false;
