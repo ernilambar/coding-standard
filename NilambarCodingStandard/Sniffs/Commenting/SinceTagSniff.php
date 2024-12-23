@@ -9,7 +9,6 @@ namespace NilambarCodingStandard\Sniffs\Commenting;
 
 use NilambarCodingStandard\Traits\CommentTag;
 use NilambarCodingStandard\Traits\GetEntityName;
-use NilambarCodingStandard\Traits\Version;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 
@@ -22,7 +21,6 @@ final class SinceTagSniff implements Sniff {
 
 	use CommentTag;
 	use GetEntityName;
-	use Version;
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -179,5 +177,35 @@ final class SinceTagSniff implements Sniff {
 			},
 			$arr[0]
 		) !== false;
+	}
+
+	/**
+	 * Checks whether tag has version.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $tag    Tag information.
+	 * @param array $tokens List of tokens.
+	 * @return bool True if version is not empty, otherwise false.
+	 */
+	private function has_version( array $tag, array $tokens ): bool {
+		$version = $tokens[ ( $tag['tag'] + 2 ) ]['content'];
+
+		return ! empty( $version ) && T_DOC_COMMENT_STRING === $tokens[ ( $tag['tag'] + 2 ) ]['code'];
+	}
+
+	/**
+	 * Checks whether version is valid.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $tag    Tag information.
+	 * @param array $tokens List of tokens.
+	 * @return bool True if version is valid, otherwise false.
+	 */
+	private function is_valid_version( array $tag, array $tokens ): bool {
+		$version = $tokens[ ( $tag['tag'] + 2 ) ]['content'];
+
+		return (bool) preg_match( '/^\d+\.\d+(\.\d+)?/', $version );
 	}
 }
