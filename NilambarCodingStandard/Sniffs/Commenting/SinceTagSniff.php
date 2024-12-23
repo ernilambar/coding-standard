@@ -62,11 +62,12 @@ final class SinceTagSniff implements Sniff {
 			return;
 		}
 
-		$since = $this->find_tag( '@since', $commentStart, $tokens );
-
+		// Current entity.
 		$entity = $this->get_entity_full_name( $phpcsFile, $stackPtr, $tokens );
 
-		if ( empty( $since ) ) {
+		$allTags = $this->find_tags( $phpcsFile, $commentStart, $commentEnd );
+
+		if ( empty( $allTags ) ) {
 			$phpcsFile->addError(
 				sprintf(
 					'@since tag missing for %s.',
@@ -79,92 +80,59 @@ final class SinceTagSniff implements Sniff {
 			return;
 		}
 
-		$allTags = $this->find_tags( $phpcsFile, $commentStart, $commentEnd );
+		$sinceTags = array_filter(
+			$allTags,
+			function ( $element ) {
+				return '@since' === $element['content'];
+			}
+		);
 
-		if ( ! empty( $allTags ) ) {
-			$firstTag = reset( $allTags );
+		// Bail if no since tags.
+		if ( empty( $sinceTags ) ) {
+			return;
+		}
 
-			if ( '@since' !== $firstTag['content'] ) {
+		// Check for first tag.
+		$firstTag = reset( $allTags );
+
+		if ( '@since' !== $firstTag['content'] ) {
+			$phpcsFile->addError(
+				sprintf(
+					'Expected @since as the first tag for %s.',
+					$entity
+				),
+				reset( $sinceTags )['tag'],
+				'NotFirst'
+			);
+		}
+
+		foreach ( $sinceTags as $since ) {
+
+			// Tag @since should have a version number.
+			if ( ! $this->has_version( $since, $tokens ) ) {
 				$phpcsFile->addError(
 					sprintf(
-						'Expected @since as the first tag for %s.',
+						'Missing @since version for %s.',
 						$entity
 					),
 					$since['tag'],
-					'NotFirst'
+					'MissingVersion'
+				);
+
+				continue;
+			}
+
+			// Check for valid version for @since tag.
+			if ( ! $this->is_valid_version( $since, $tokens ) ) {
+				$phpcsFile->addError(
+					sprintf(
+						'Invalid @since version for %s.',
+						$entity
+					),
+					$since['tag'],
+					'InvalidVersion'
 				);
 			}
-		}
-
-		// Tag @since should have a version number.
-		if ( ! $this->has_version( $since, $tokens ) ) {
-			$phpcsFile->addError(
-				sprintf(
-					'Missing @since version for %s.',
-					$entity
-				),
-				$since['tag'],
-				'MissingVersion'
-			);
-
-			return;
-		}
-
-		// Check for valid version for @since tag.
-		if ( ! $this->is_valid_version( $since, $tokens ) ) {
-			$phpcsFile->addError(
-				sprintf(
-					'Invalid @since version for %s.',
-					$entity
-				),
-				$since['tag'],
-				'InvalidVersion'
-			);
-
-			return;
-		}
-
-		$this->tag_spacing( $phpcsFile, $stackPtr, $since );
-	}
-
-	/**
-	 * Processes and detect empty line between tags.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param File  $phpcsFile The PHP_CodeSniffer file where the token was found.
-	 * @param int   $stackPtr  The position in the PHP_CodeSniffer file's token stack where the token was found.
-	 * @param array $since     Since tag token.
-	 *
-	 * @return void
-	 */
-	private function tag_spacing( $phpcsFile, $stackPtr, $since ) {
-		$tokens         = $phpcsFile->getTokens();
-		$entity         = $this->get_entity_full_name( $phpcsFile, $stackPtr, $tokens );
-		$nextAnnotation = $phpcsFile->findNext( T_DOC_COMMENT_TAG, $since['tag'] + 1 );
-		$commentEnd     = $phpcsFile->findPrevious( T_DOC_COMMENT_CLOSE_TAG, $stackPtr );
-		$nextAnnotation = $nextAnnotation && $tokens[ $commentEnd ]['line'] > $tokens[ $nextAnnotation ]['line'] ? $nextAnnotation : false;
-
-		if ( ! $this->has_empty_line_before_tag( $phpcsFile, $since ) ) {
-			$phpcsFile->addWarning(
-				sprintf(
-					'Empty line missing before @since tag for %s.',
-					$entity
-				),
-				$since['tag'],
-				'MissingEmptyLineBeforeSince'
-			);
-		}
-
-		if ( ! $this->is_last_tag( $phpcsFile, $since ) && ! $this->has_empty_line_after_tag( $phpcsFile, $since ) ) {
-			$phpcsFile->addWarning(
-				sprintf(
-					'Empty line missing after @since tag for %s.',
-					$entity
-				),
-				$since['tag'],
-				'MissingEmptyLineAfterSince'
-			);
 		}
 	}
 }
