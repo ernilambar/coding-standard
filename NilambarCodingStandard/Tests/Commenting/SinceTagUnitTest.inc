@@ -1,12 +1,13 @@
 <?php
-
 /**
  * Sample function.
  */
 function sample_function() {
 }
 
-// Sample constant.
+/**
+ * Sample constant.
+ */
 const MY_CONSTANT = 123;
 
 /**
@@ -88,4 +89,14 @@ function function_six() {
  * @since stable New feature
  */
 function function_seven() {
+}
+
+/**
+ * Function.
+ *
+ * @since 1.0.0
+ * @see link
+ * @since 2.0.0 New feature
+ */
+function function_eight() {
 }

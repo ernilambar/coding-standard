@@ -134,5 +134,50 @@ final class SinceTagSniff implements Sniff {
 				);
 			}
 		}
+
+		if ( count( $sinceTags ) > 1 ) {
+			$hasProperOrder = $this->isConsecutiveAscendingNumericSeries( array_keys( $sinceTags ) );
+
+			if ( ! $hasProperOrder ) {
+				$phpcsFile->addError(
+					sprintf(
+						'Keep all @since tags together in %s.',
+						$entity
+					),
+					reset( $sinceTags )['tag'],
+					'MixedupTags'
+				);
+			}
+		}
+	}
+
+	/**
+	 * Checks if an array represents a consecutive ascending numeric series.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $arr The array to check.
+	 * @return bool True if the array is a consecutive ascending numeric series, false otherwise.
+	 */
+	private function isConsecutiveAscendingNumericSeries( array $arr ): bool {
+		if ( empty( $arr ) ) {
+			return true;
+		}
+
+		if ( ! is_numeric( $arr[0] ) ) {
+			return false;
+		}
+
+		return array_reduce(
+			array_slice( $arr, 1 ),
+			function ( $carry, $item ) {
+				if ( false === $carry || ! is_numeric( $item ) ) {
+					return false;
+				}
+
+				return $item === $carry + 1 ? $item : false;
+			},
+			$arr[0]
+		) !== false;
 	}
 }
