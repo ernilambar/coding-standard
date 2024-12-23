@@ -246,6 +246,15 @@ final class SinceTagSniff implements Sniff {
 		return '';
 	}
 
+	/**
+	 * Get the first token of the previous line.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr The position of the current token in the stack.
+	 * @return int|false The position of the first token on the previous line, or false if there is no previous line.
+	 */
 	private function get_previous_line_first_token( File $phpcsFile, $stackPtr ) {
 		$tokens      = $phpcsFile->getTokens();
 		$currentLine = $tokens[ $stackPtr ]['line'];
