@@ -56,7 +56,14 @@ final class SinceTagSniff implements Sniff {
 			return;
 		}
 
-		$since  = $this->find_tag( '@since', $commentStart, $tokens );
+		$commentEnd = $phpcsFile->findNext( T_DOC_COMMENT_CLOSE_TAG, ( $commentStart + 1 ) );
+
+		if ( false === $commentEnd ) {
+			return;
+		}
+
+		$since = $this->find_tag( '@since', $commentStart, $tokens );
+
 		$entity = $this->get_entity_full_name( $phpcsFile, $stackPtr, $tokens );
 
 		if ( empty( $since ) ) {
@@ -70,6 +77,23 @@ final class SinceTagSniff implements Sniff {
 			);
 
 			return;
+		}
+
+		$allTags = $this->find_tags( $phpcsFile, $commentStart, $commentEnd );
+
+		if ( ! empty( $allTags ) ) {
+			$firstTag = reset( $allTags );
+
+			if ( '@since' !== $firstTag['content'] ) {
+				$phpcsFile->addError(
+					sprintf(
+						'Expected @since as the first tag for %s.',
+						$entity
+					),
+					$since['tag'],
+					'NotFirst'
+				);
+			}
 		}
 
 		// Tag @since should have a version number.

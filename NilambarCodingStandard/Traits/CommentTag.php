@@ -59,36 +59,6 @@ trait CommentTag {
 	}
 
 	/**
-	 * Checks whether tag is the first tag in PHPDoc.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param File  $phpcsFile The PHP_CodeSniffer file where the token was found.
-	 * @param array $tag       Tag information.
-	 * @return bool True if first tag, otherwise false.
-	 */
-	protected function is_first_tag( File $phpcsFile, array $tag ): bool {
-		$tokens = $phpcsFile->getTokens();
-
-		// Get the tag position and validate it.
-		$tagPos = $tag['tag'] ?? null;
-		if ( ! is_int( $tagPos ) ) {
-			return false;
-		}
-
-		// Find the previous significant token before the tag, skipping whitespace.
-		$prevSignificant = $phpcsFile->findPrevious( T_DOC_COMMENT_STRING, $tagPos - 1, null, true );
-
-		// No previous content means no tag before the current one. Hence, this is the first one.
-		if ( false === $prevSignificant ) {
-			return true;
-		}
-
-		// Check if the previous significant token's line is less than the current tag's line.
-		return $tokens[ $prevSignificant ]['line'] < $tokens[ $tagPos ]['line'];
-	}
-
-	/**
 	 * Checks whether there is empty line after given tag in PHPDoc.
 	 *
 	 * @since 1.0.0
@@ -142,5 +112,31 @@ trait CommentTag {
 
 		// Check the line difference.
 		return $tokens[ $prevContent ]['line'] + 1 < $tag['line'];
+	}
+
+	/**
+	 * Find all tags in PHPDoc.
+	 *
+	 * @param File $phpcsFile The PHPCS file object.
+	 * @param int  $commentStart The starting position (token index) of the comment.
+	 * @param int  $commentEnd   The ending position (token index) of the comment.
+	 * @return array An array of tags, with tag names as keys.  Returns an empty array if no tags are found or if the range is invalid.
+	 */
+	protected function find_tags( File $phpcsFile, int $commentStart, int $commentEnd ): array {
+		if ( $commentEnd < $commentStart ) {
+			return [];
+		}
+
+		$tags = [];
+
+		for ( $i = $commentStart + 1; $i < $commentEnd; $i++ ) {
+			$token = $phpcsFile->getTokens()[ $i ];
+
+			if ( T_DOC_COMMENT_TAG === $token['code'] && 0 === strpos( $token['content'], '@' ) ) {
+				$tags[] = $token;
+			}
+		}
+
+		return $tags;
 	}
 }
