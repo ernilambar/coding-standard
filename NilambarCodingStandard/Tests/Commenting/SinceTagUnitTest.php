@@ -23,19 +23,20 @@ final class SinceTagUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return [
-			6  => 1,
-			10 => 1,
-			15 => 1,
+			5  => 1,
+			11 => 1,
 			16 => 1,
-			21 => 1,
+			17 => 1,
 			22 => 1,
-			27 => 1,
+			23 => 1,
 			28 => 1,
-			34 => 1,
-			42 => 1,
-			70 => 1,
-			87 => 1,
+			29 => 1,
+			35 => 1,
+			43 => 1,
+			71 => 1,
 			88 => 1,
+			89 => 1,
+			97 => 1,
 		];
 	}
 
