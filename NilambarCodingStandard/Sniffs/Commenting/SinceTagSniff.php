@@ -122,7 +122,7 @@ final class SinceTagSniff implements Sniff {
 		$nextAnnotation = $nextAnnotation && $tokens[ $commentEnd ]['line'] > $tokens[ $nextAnnotation ]['line'] ? $nextAnnotation : false;
 
 		if ( ! $this->has_empty_line_before_tag( $phpcsFile, $since ) ) {
-			$phpcsFile->addError(
+			$phpcsFile->addWarning(
 				sprintf(
 					'Empty line missing before @since tag for %s.',
 					$entity
@@ -133,7 +133,7 @@ final class SinceTagSniff implements Sniff {
 		}
 
 		if ( ! $this->is_last_tag( $phpcsFile, $since ) && ! $this->has_empty_line_after_tag( $phpcsFile, $since ) ) {
-			$phpcsFile->addError(
+			$phpcsFile->addWarning(
 				sprintf(
 					'Empty line missing after @since tag for %s.',
 					$entity

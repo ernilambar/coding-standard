@@ -33,9 +33,6 @@ final class SinceTagUnitTest extends AbstractSniffUnitTest {
 			28 => 1,
 			34 => 1,
 			42 => 1,
-			60 => 1,
-			70 => 1,
-			77 => 1,
 		];
 	}
 
@@ -45,7 +42,11 @@ final class SinceTagUnitTest extends AbstractSniffUnitTest {
 	 * @return array<int, array<int, string>>
 	 */
 	public function getWarningList() {
-		return [];
+		return [
+			60 => 1,
+			70 => 1,
+			77 => 1,
+		];
 	}
 
 	/**
