@@ -7,15 +7,14 @@
 
 namespace NilambarCodingStandard\Sniffs\Commenting;
 
-use PHP_CodeSniffer\Files\File;
-use PHP_CodeSniffer\Sniffs\Sniff;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Detect whether comments are in all caps.
  *
  * @since 1.0.0
  */
-final class AllCapsCommentSniff implements Sniff {
+final class AllCapsCommentSniff extends Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -23,20 +22,19 @@ final class AllCapsCommentSniff implements Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return [ T_COMMENT ];
+		return [ \T_COMMENT ];
 	}
 
 	/**
-	 * Processes this sniff, when one of its tokens is encountered.
+	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
-	 * @param int                         $stackPtr  The position of the current token in the stack passed in $tokens.
+	 * @since 1.0.0
 	 *
-	 * @return void
+	 * @param int $stackPtr The position of the current token in the stack.
+	 * @return int|void Integer stack pointer to skip forward or void to continue normal file processing.
 	 */
-	public function process( File $phpcsFile, $stackPtr ) {
-		$tokens  = $phpcsFile->getTokens();
-		$content = $tokens[ $stackPtr ]['content'];
+	public function process_token( $stackPtr ) {
+		$content = $this->tokens[ $stackPtr ]['content'];
 
 		// Remove the comment characters (//, /*, */, #) and trim whitespace.
 		$commentText = preg_replace( '/^\s*(\/\/|#|\/\*|\*\/)/', '', $content );
@@ -44,7 +42,7 @@ final class AllCapsCommentSniff implements Sniff {
 
 		if ( strtoupper( $commentText ) === $commentText ) {
 			$message = 'Avoid using all capital letters in comments.';
-			$phpcsFile->addWarning( $message, $stackPtr, 'Found' );
+			$this->phpcsFile->addWarning( $message, $stackPtr, 'Found' );
 		}
 	}
 }
