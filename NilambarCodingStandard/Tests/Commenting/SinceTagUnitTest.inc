@@ -80,3 +80,12 @@ function function_five() {
  */
 function function_six() {
 }
+
+/**
+ * Function.
+ *
+ * @since initial
+ * @since stable New feature
+ */
+function function_seven() {
+}
