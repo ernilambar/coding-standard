@@ -100,3 +100,11 @@ function function_seven() {
  */
 function function_eight() {
 }
+
+/**
+ * Function.
+ * @since 1.0.0
+ * @since 2.0.0
+ */
+function function_nine() {
+}

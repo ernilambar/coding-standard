@@ -102,6 +102,22 @@ final class SinceTagSniff implements Sniff {
 				reset( $sinceTags )['tag'],
 				'NotFirst'
 			);
+		} else {
+			// Find the previous line.
+			$previous_content = $this->get_previous_line_content( $phpcsFile, $firstTag['tag'] );
+
+			$previous_content = trim( str_replace( '*', '', $previous_content ) );
+
+			if ( strlen( $previous_content ) > 0 ) {
+				$phpcsFile->addError(
+					sprintf(
+						'Expected empty line before @since tag for %s.',
+						$entity
+					),
+					$firstTag['tag'],
+					'MissingEmptyLineBeforeTag'
+				);
+			}
 		}
 
 		foreach ( $sinceTags as $since ) {
@@ -207,5 +223,44 @@ final class SinceTagSniff implements Sniff {
 		$version = $tokens[ ( $tag['tag'] + 2 ) ]['content'];
 
 		return (bool) preg_match( '/^\d+\.\d+(\.\d+)?/', $version );
+	}
+
+	/**
+	 * Returns content of the previous line.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr The position of the current token in the stack.
+	 * @return string The content of the previous line.
+	 */
+	private function get_previous_line_content( File $phpcsFile, int $stackPtr ): string {
+		$previousLineFirstTokenPtr = $this->get_previous_line_first_token( $phpcsFile, $stackPtr );
+
+		if ( false !== $previousLineFirstTokenPtr ) {
+				$previousLineContent = $phpcsFile->getTokensAsString( $previousLineFirstTokenPtr, $stackPtr - $previousLineFirstTokenPtr );
+
+				return trim( $previousLineContent );
+		}
+
+		return '';
+	}
+
+	private function get_previous_line_first_token( File $phpcsFile, $stackPtr ) {
+		$tokens      = $phpcsFile->getTokens();
+		$currentLine = $tokens[ $stackPtr ]['line'];
+
+		// Backtrack to reach a previous line.
+		$prevPtr = $stackPtr;
+		while ( $prevPtr > 0 && $tokens[ $prevPtr ]['line'] === $currentLine ) {
+			--$prevPtr;
+		}
+
+		// Now find the first token on the previous line.
+		if ( $prevPtr > 0 ) {
+			return $phpcsFile->findFirstOnLine( [], $prevPtr, true );
+		}
+
+		return false;
 	}
 }
