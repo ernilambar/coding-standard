@@ -41,6 +41,6 @@ trait Version {
 	protected function is_valid_version( array $tag, array $tokens ): bool {
 		$version = $tokens[ ( $tag['tag'] + 2 ) ]['content'];
 
-		return (bool) preg_match( '/^[\d.]+\d$/', $version );
+		return (bool) preg_match( '/^[\d.]+\d/', $version );
 	}
 }
