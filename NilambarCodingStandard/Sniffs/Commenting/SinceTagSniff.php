@@ -145,7 +145,7 @@ final class SinceTagSniff implements Sniff {
 						$entity
 					),
 					reset( $sinceTags )['tag'],
-					'MixedupTags'
+					'Ungrouped'
 				);
 			}
 		}
