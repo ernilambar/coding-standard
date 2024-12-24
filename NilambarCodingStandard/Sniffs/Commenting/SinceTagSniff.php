@@ -65,19 +65,6 @@ final class SinceTagSniff implements Sniff {
 
 		$allTags = $this->find_tags( $phpcsFile, $commentStart, $commentEnd );
 
-		if ( empty( $allTags ) ) {
-			$phpcsFile->addError(
-				sprintf(
-					'@since tag missing for %s.',
-					$entity
-				),
-				$stackPtr,
-				'Missing'
-			);
-
-			return;
-		}
-
 		$sinceTags = array_filter(
 			$allTags,
 			function ( $element ) {
@@ -87,6 +74,15 @@ final class SinceTagSniff implements Sniff {
 
 		// Bail if no since tags.
 		if ( empty( $sinceTags ) ) {
+			$phpcsFile->addError(
+				sprintf(
+					'@since tag missing for %s.',
+					$entity
+				),
+				$stackPtr,
+				'Missing'
+			);
+
 			return;
 		}
 
