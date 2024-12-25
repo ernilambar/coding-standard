@@ -80,7 +80,8 @@ trait CommentTrait {
 							T_DOC_COMMENT_TAG,
 							T_DOC_COMMENT_STRING,
 							T_DOC_COMMENT_CLOSE_TAG,
-						]
+						],
+						true
 					) ) {
 						// If any other token is between, it's not a contiguous block.
 						return false;

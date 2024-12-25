@@ -28,11 +28,11 @@ final class SinceTagSniff extends Sniff {
 	 */
 	public function register() {
 		return [
-			T_FUNCTION,
-			T_CLASS,
-			T_INTERFACE,
-			T_TRAIT,
-			T_CONST,
+			\T_FUNCTION,
+			\T_CLASS,
+			\T_INTERFACE,
+			\T_TRAIT,
+			\T_CONST,
 		];
 	}
 

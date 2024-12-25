@@ -41,8 +41,11 @@ final class AllCapsCommentSniff extends Sniff {
 		$commentText = trim( $commentText );
 
 		if ( strtoupper( $commentText ) === $commentText ) {
-			$message = 'Avoid using all capital letters in comments.';
-			$this->phpcsFile->addWarning( $message, $stackPtr, 'Found' );
+			$this->phpcsFile->addWarning(
+				'Avoid using all capital letters in comments.',
+				$stackPtr,
+				'Found'
+			);
 		}
 	}
 }
