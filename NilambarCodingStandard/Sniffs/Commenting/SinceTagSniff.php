@@ -45,6 +45,11 @@ final class SinceTagSniff extends Sniff {
 	 * @return int|void Integer stack pointer to skip forward or void to continue normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
+		// Bail if no doc block.
+		if ( ! $this->has_doc_block( $this->phpcsFile, $stackPtr ) ) {
+			return;
+		}
+
 		$tokens = $this->phpcsFile->getTokens();
 
 		$commentStart = $this->phpcsFile->findPrevious( T_DOC_COMMENT_OPEN_TAG, $stackPtr );

@@ -23,19 +23,16 @@ final class SinceTagUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return [
-			5  => 1,
-			11 => 1,
-			16 => 1,
-			17 => 1,
-			22 => 1,
-			23 => 1,
-			28 => 1,
-			29 => 1,
-			35 => 1,
-			43 => 1,
-			88 => 1,
-			89 => 1,
-			97 => 1,
+			5   => 1,
+			11  => 1,
+			16  => 1,
+			25  => 1,
+			34  => 1,
+			41  => 1,
+			49  => 1,
+			94  => 1,
+			95  => 1,
+			103 => 1,
 		];
 	}
 
@@ -46,7 +43,7 @@ final class SinceTagUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return [
-			71 => 1,
+			77 => 1,
 		];
 	}
 

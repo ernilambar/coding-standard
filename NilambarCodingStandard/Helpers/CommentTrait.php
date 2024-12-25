@@ -48,4 +48,49 @@ trait CommentTrait {
 
 		return $tags;
 	}
+
+	/**
+	 * Checks if token has an associated PHPDoc block.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr The index of the token in the stack.
+	 * @return bool True if a PHPDoc block is present immediately before the token; false otherwise.
+	 */
+	protected function has_doc_block( File $phpcsFile, int $stackPtr ): bool {
+		$tokens = $phpcsFile->getTokens();
+
+		// Find the previous non-whitespace token.
+		$prevTokenPos = $phpcsFile->findPrevious( [ T_WHITESPACE ], $stackPtr - 1, null, true );
+
+		if ( false !== $prevTokenPos && T_DOC_COMMENT_CLOSE_TAG === $tokens[ $prevTokenPos ]['code'] ) {
+			// Ensure the comment block actually opens correctly.
+			$commentStart = $phpcsFile->findPrevious( T_DOC_COMMENT_OPEN_TAG, $prevTokenPos );
+
+			if ( false !== $commentStart ) {
+				// Verify the tokens are a contiguous comment block up to our $prevTokenPos.
+				for ( $i = $commentStart; $i <= $prevTokenPos; $i++ ) {
+					if ( ! in_array(
+						$tokens[ $i ]['code'],
+						[
+							T_DOC_COMMENT_OPEN_TAG,
+							T_DOC_COMMENT_WHITESPACE,
+							T_DOC_COMMENT_STAR,
+							T_DOC_COMMENT_TAG,
+							T_DOC_COMMENT_STRING,
+							T_DOC_COMMENT_CLOSE_TAG,
+						]
+					) ) {
+						// If any other token is between, it's not a contiguous block.
+						return false;
+					}
+				}
+
+				return true;
+			}
+		}
+
+		return false;
+	}
 }

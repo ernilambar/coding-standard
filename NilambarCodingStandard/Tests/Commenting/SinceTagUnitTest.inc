@@ -19,12 +19,18 @@ class Sample_Class {
   }
 }
 
+/**
+ * MyTrait.
+ */
 trait MyTrait {
   public function myTraitMethod() {
     echo "Hello from MyTrait!";
 	}
 }
 
+/**
+ * MyInterface.
+ */
 interface MyInterface {
   public function myMethod();
 }
@@ -99,4 +105,7 @@ function function_seven() {
  * @since 2.0.0 New feature
  */
 function function_eight() {
+}
+
+function function_nine() {
 }
