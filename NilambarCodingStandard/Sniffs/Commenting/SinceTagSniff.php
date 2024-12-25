@@ -9,15 +9,14 @@ namespace NilambarCodingStandard\Sniffs\Commenting;
 
 use NilambarCodingStandard\Traits\CommentTag;
 use NilambarCodingStandard\Traits\GetEntityName;
-use PHP_CodeSniffer\Files\File;
-use PHP_CodeSniffer\Sniffs\Sniff;
+use WordPressCS\WordPress\Sniff;
 
 /**
- * Detect since tag in PHPDoc.
+ * SinceTagSniff class.
  *
  * @since 1.0.0
  */
-final class SinceTagSniff implements Sniff {
+final class SinceTagSniff extends Sniff {
 
 	use CommentTag;
 	use GetEntityName;
@@ -38,32 +37,32 @@ final class SinceTagSniff implements Sniff {
 	}
 
 	/**
-	 * Processes this sniff, when one of its tokens is encountered.
+	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
-	 * @param int                         $stackPtr  The position of the current token in the stack passed in $tokens.
+	 * @since 1.0.0
 	 *
-	 * @return void
+	 * @param int $stackPtr The position of the current token in the stack.
+	 * @return int|void Integer stack pointer to skip forward or void to continue normal file processing.
 	 */
-	public function process( File $phpcsFile, $stackPtr ) {
-		$tokens = $phpcsFile->getTokens();
+	public function process_token( $stackPtr ) {
+		$tokens = $this->phpcsFile->getTokens();
 
-		$commentStart = $phpcsFile->findPrevious( T_DOC_COMMENT_OPEN_TAG, $stackPtr );
+		$commentStart = $this->phpcsFile->findPrevious( T_DOC_COMMENT_OPEN_TAG, $stackPtr );
 
 		if ( empty( $commentStart ) ) {
 			return;
 		}
 
-		$commentEnd = $phpcsFile->findNext( T_DOC_COMMENT_CLOSE_TAG, ( $commentStart + 1 ) );
+		$commentEnd = $this->phpcsFile->findNext( T_DOC_COMMENT_CLOSE_TAG, ( $commentStart + 1 ) );
 
 		if ( false === $commentEnd ) {
 			return;
 		}
 
 		// Current entity.
-		$entity = $this->get_entity_full_name( $phpcsFile, $stackPtr, $tokens );
+		$entity = $this->get_entity_full_name( $this->phpcsFile, $stackPtr, $tokens );
 
-		$allTags = $this->find_tags( $phpcsFile, $commentStart, $commentEnd );
+		$allTags = $this->find_tags( $this->phpcsFile, $commentStart, $commentEnd );
 
 		$sinceTags = array_filter(
 			$allTags,
@@ -74,7 +73,7 @@ final class SinceTagSniff implements Sniff {
 
 		// Bail if no since tags.
 		if ( empty( $sinceTags ) ) {
-			$phpcsFile->addError(
+			$this->phpcsFile->addError(
 				sprintf(
 					'Missing @since tag for %s.',
 					$entity
@@ -90,7 +89,7 @@ final class SinceTagSniff implements Sniff {
 		$firstTag = reset( $allTags );
 
 		if ( '@since' !== $firstTag['content'] ) {
-			$phpcsFile->addError(
+			$this->phpcsFile->addError(
 				sprintf(
 					'Expected @since as the first tag for %s.',
 					$entity
@@ -104,7 +103,7 @@ final class SinceTagSniff implements Sniff {
 
 			// Tag @since should have a version number.
 			if ( ! $this->has_version( $since, $tokens ) ) {
-				$phpcsFile->addError(
+				$this->phpcsFile->addError(
 					sprintf(
 						'Missing @since version for %s.',
 						$entity
@@ -118,7 +117,7 @@ final class SinceTagSniff implements Sniff {
 
 			// Check for valid version for @since tag.
 			if ( ! $this->is_valid_version( $since, $tokens ) ) {
-				$phpcsFile->addError(
+				$this->phpcsFile->addError(
 					sprintf(
 						'Invalid @since version for %s.',
 						$entity
@@ -133,7 +132,7 @@ final class SinceTagSniff implements Sniff {
 			$hasProperOrder = $this->isConsecutiveAscendingNumericSeries( array_keys( $sinceTags ) );
 
 			if ( ! $hasProperOrder ) {
-				$phpcsFile->addError(
+				$this->phpcsFile->addError(
 					sprintf(
 						'Keep all @since tags together in %s.',
 						$entity

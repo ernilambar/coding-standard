@@ -10,7 +10,7 @@ namespace NilambarCodingStandard\Sniffs\Commenting;
 use WordPressCS\WordPress\Sniff;
 
 /**
- * Detect whether comments are in all caps.
+ * AllCapsCommentSniff class.
  *
  * @since 1.0.0
  */
