@@ -87,7 +87,7 @@ final class SinceTagSniff extends Sniff {
 		$firstTag = reset( $allTags );
 
 		if ( '@since' !== $firstTag['content'] ) {
-			$this->phpcsFile->addError(
+			$this->phpcsFile->addWarning(
 				'Expected @since as the first tag for %s.',
 				reset( $sinceTags )['tag'],
 				'NotFirst',
