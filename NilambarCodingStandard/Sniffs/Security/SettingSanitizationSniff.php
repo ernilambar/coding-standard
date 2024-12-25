@@ -7,6 +7,7 @@
 
 namespace NilambarCodingStandard\Sniffs\Security;
 
+use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
@@ -54,18 +55,28 @@ final class SettingSanitizationSniff extends AbstractFunctionParameterSniff {
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
 		$third_param = PassedParameters::getParameterFromStack( $parameters, 3, 'args' );
+		$error_code  = MessageHelper::stringToErrorCode( $group_name . '_' . $matched_content, true );
 
 		if ( false === $third_param ) {
-			$error = 'Sanitization missing for register_setting().';
-			$this->phpcsFile->addError( $error, $stackPtr, 'Missing' );
+			$this->phpcsFile->addError(
+				'Sanitization missing for %s().',
+				$stackPtr,
+				$error_code . 'Missing',
+				[ $matched_content ]
+			);
+
 			return;
 		}
 
 		$content = TextStrings::stripQuotes( $third_param['clean'] );
 
 		if ( is_numeric( $content ) || in_array( strtolower( $content ), [ 'true', 'false' ], true ) ) {
-			$error = 'Invalid sanitization in third parameter of register_setting().';
-			$this->phpcsFile->addError( $error, $stackPtr, 'Invalid' );
+			$this->phpcsFile->addError(
+				'Invalid sanitization in third parameter of %s().',
+				$stackPtr,
+				$error_code . 'Invalid',
+				[ $matched_content ]
+			);
 		}
 	}
 }

@@ -32,7 +32,7 @@ final class RestrictedConstantsSniff extends AbstractFunctionParameterSniff {
 	];
 
 	/**
-	 * Array of functions to check.
+	 * List of functions to examine.
 	 *
 	 * @since 1.0.0
 	 *
@@ -63,7 +63,7 @@ final class RestrictedConstantsSniff extends AbstractFunctionParameterSniff {
 	}
 
 	/**
-	 * Process the parameters of a matched `define` function call.
+	 * Process the parameters of a matched function.
 	 *
 	 * @since 1.0.0
 	 *

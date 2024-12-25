@@ -12,7 +12,7 @@ use NilambarCodingStandard\Traits\GetEntityName;
 use WordPressCS\WordPress\Sniff;
 
 /**
- * SinceTagSniff class.
+ * Detect since tag in PHPDoc.
  *
  * @since 1.0.0
  */
@@ -74,12 +74,10 @@ final class SinceTagSniff extends Sniff {
 		// Bail if no since tags.
 		if ( empty( $sinceTags ) ) {
 			$this->phpcsFile->addError(
-				sprintf(
-					'Missing @since tag for %s.',
-					$entity
-				),
+				'Missing @since tag for %s.',
 				$stackPtr,
-				'Missing'
+				'Missing',
+				[ $entity ]
 			);
 
 			return;
@@ -90,12 +88,10 @@ final class SinceTagSniff extends Sniff {
 
 		if ( '@since' !== $firstTag['content'] ) {
 			$this->phpcsFile->addError(
-				sprintf(
-					'Expected @since as the first tag for %s.',
-					$entity
-				),
+				'Expected @since as the first tag for %s.',
 				reset( $sinceTags )['tag'],
-				'NotFirst'
+				'NotFirst',
+				[ $entity ]
 			);
 		}
 
@@ -104,12 +100,10 @@ final class SinceTagSniff extends Sniff {
 			// Tag @since should have a version number.
 			if ( ! $this->has_version( $since, $tokens ) ) {
 				$this->phpcsFile->addError(
-					sprintf(
-						'Missing @since version for %s.',
-						$entity
-					),
+					'Missing @since version for %s.',
 					$since['tag'],
-					'MissingVersion'
+					'MissingVersion',
+					[ $entity ]
 				);
 
 				continue;
@@ -118,12 +112,10 @@ final class SinceTagSniff extends Sniff {
 			// Check for valid version for @since tag.
 			if ( ! $this->is_valid_version( $since, $tokens ) ) {
 				$this->phpcsFile->addError(
-					sprintf(
-						'Invalid @since version for %s.',
-						$entity
-					),
+					'Invalid @since version for %s.',
 					$since['tag'],
-					'InvalidVersion'
+					'InvalidVersion',
+					[ $entity ]
 				);
 			}
 		}
@@ -133,12 +125,10 @@ final class SinceTagSniff extends Sniff {
 
 			if ( ! $hasProperOrder ) {
 				$this->phpcsFile->addError(
-					sprintf(
-						'Keep all @since tags together in %s.',
-						$entity
-					),
+					'Keep all @since tags together in %s.',
 					reset( $sinceTags )['tag'],
-					'Ungrouped'
+					'Ungrouped',
+					[ $entity ]
 				);
 			}
 		}

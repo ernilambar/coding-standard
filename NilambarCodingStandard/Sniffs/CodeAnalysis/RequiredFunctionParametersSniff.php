@@ -19,7 +19,7 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 final class RequiredFunctionParametersSniff extends AbstractFunctionParameterSniff {
 
 	/**
-	 * Array of functions to check.
+	 * List of functions to examine.
 	 *
 	 * @since 1.0.0
 	 *
@@ -50,7 +50,7 @@ final class RequiredFunctionParametersSniff extends AbstractFunctionParameterSni
 	}
 
 	/**
-	 * Process the parameters of a matched function call.
+	 * Process the parameters of a matched function.
 	 *
 	 * @since 1.0.0
 	 *
@@ -73,7 +73,10 @@ final class RequiredFunctionParametersSniff extends AbstractFunctionParameterSni
 				'The "%s" parameter for function %s() is missing.',
 				$stackPtr,
 				$error_code . 'Missing',
-				[ $target_param['name'], $matched_content ]
+				[
+					$target_param['name'],
+					$matched_content,
+				]
 			);
 		}
 	}
