@@ -37,7 +37,7 @@ trait CommentTrait {
 		$tags = [];
 
 		foreach ( $commentTags as $commentTag ) {
-			if ( T_DOC_COMMENT_TAG === $tokens[ $commentTag ]['code'] ) {
+			if ( \T_DOC_COMMENT_TAG === $tokens[ $commentTag ]['code'] ) {
 				$tag = $tokens[ $commentTag ];
 
 				$tag['tag'] = $commentTag;
@@ -62,11 +62,11 @@ trait CommentTrait {
 		$tokens = $phpcsFile->getTokens();
 
 		// Find the previous non-whitespace token.
-		$prevTokenPos = $phpcsFile->findPrevious( [ T_WHITESPACE ], $stackPtr - 1, null, true );
+		$prevTokenPos = $phpcsFile->findPrevious( [ \T_WHITESPACE ], $stackPtr - 1, null, true );
 
-		if ( false !== $prevTokenPos && T_DOC_COMMENT_CLOSE_TAG === $tokens[ $prevTokenPos ]['code'] ) {
+		if ( false !== $prevTokenPos && \T_DOC_COMMENT_CLOSE_TAG === $tokens[ $prevTokenPos ]['code'] ) {
 			// Ensure the comment block actually opens correctly.
-			$commentStart = $phpcsFile->findPrevious( T_DOC_COMMENT_OPEN_TAG, $prevTokenPos );
+			$commentStart = $phpcsFile->findPrevious( \T_DOC_COMMENT_OPEN_TAG, $prevTokenPos );
 
 			if ( false !== $commentStart ) {
 				// Verify the tokens are a contiguous comment block up to our $prevTokenPos.
@@ -74,12 +74,12 @@ trait CommentTrait {
 					if ( ! in_array(
 						$tokens[ $i ]['code'],
 						[
-							T_DOC_COMMENT_OPEN_TAG,
-							T_DOC_COMMENT_WHITESPACE,
-							T_DOC_COMMENT_STAR,
-							T_DOC_COMMENT_TAG,
-							T_DOC_COMMENT_STRING,
-							T_DOC_COMMENT_CLOSE_TAG,
+							\T_DOC_COMMENT_OPEN_TAG,
+							\T_DOC_COMMENT_WHITESPACE,
+							\T_DOC_COMMENT_STAR,
+							\T_DOC_COMMENT_TAG,
+							\T_DOC_COMMENT_STRING,
+							\T_DOC_COMMENT_CLOSE_TAG,
 						],
 						true
 					) ) {

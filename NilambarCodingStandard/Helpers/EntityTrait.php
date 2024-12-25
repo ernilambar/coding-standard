@@ -30,7 +30,7 @@ trait EntityTrait {
 
 		$suffix = $this->get_suffix( $tokens[ $stackPtr ]['code'] );
 
-		if ( T_CONST === $tokens[ $stackPtr ]['code'] ) {
+		if ( \T_CONST === $tokens[ $stackPtr ]['code'] ) {
 			return $tokens[ $stackPtr + 2 ]['content'] . $suffix;
 		}
 
@@ -49,19 +49,19 @@ trait EntityTrait {
 		$suffix = '';
 
 		switch ( $code ) {
-			case T_FUNCTION:
+			case \T_FUNCTION:
 				$suffix = '() function';
 				break;
-			case T_CLASS:
+			case \T_CLASS:
 				$suffix = ' class';
 				break;
-			case T_INTERFACE:
+			case \T_INTERFACE:
 				$suffix = ' interface';
 				break;
-			case T_TRAIT:
+			case \T_TRAIT:
 				$suffix = ' trait';
 				break;
-			case T_CONST:
+			case \T_CONST:
 				$suffix = ' constant';
 				break;
 		}

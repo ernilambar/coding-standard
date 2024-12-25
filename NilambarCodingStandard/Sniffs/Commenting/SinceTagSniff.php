@@ -54,13 +54,13 @@ final class SinceTagSniff extends Sniff {
 
 		$tokens = $this->phpcsFile->getTokens();
 
-		$commentStart = $this->phpcsFile->findPrevious( T_DOC_COMMENT_OPEN_TAG, $stackPtr );
+		$commentStart = $this->phpcsFile->findPrevious( \T_DOC_COMMENT_OPEN_TAG, $stackPtr );
 
 		if ( empty( $commentStart ) ) {
 			return;
 		}
 
-		$commentEnd = $this->phpcsFile->findNext( T_DOC_COMMENT_CLOSE_TAG, ( $commentStart + 1 ) );
+		$commentEnd = $this->phpcsFile->findNext( \T_DOC_COMMENT_CLOSE_TAG, ( $commentStart + 1 ) );
 
 		if ( false === $commentEnd ) {
 			return;
@@ -183,7 +183,7 @@ final class SinceTagSniff extends Sniff {
 	private function has_version( array $tag, array $tokens ): bool {
 		$version = $tokens[ ( $tag['tag'] + 2 ) ]['content'];
 
-		return ! empty( $version ) && T_DOC_COMMENT_STRING === $tokens[ ( $tag['tag'] + 2 ) ]['code'];
+		return ! empty( $version ) && \T_DOC_COMMENT_STRING === $tokens[ ( $tag['tag'] + 2 ) ]['code'];
 	}
 
 	/**
