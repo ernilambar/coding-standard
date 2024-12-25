@@ -76,7 +76,7 @@ final class SinceTagSniff implements Sniff {
 		if ( empty( $sinceTags ) ) {
 			$phpcsFile->addError(
 				sprintf(
-					'@since tag missing for %s.',
+					'Missing @since tag for %s.',
 					$entity
 				),
 				$stackPtr,
