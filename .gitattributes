@@ -1,8 +1,7 @@
 /.git export-ignore
 /.github export-ignore
 
-/docs export-ignore
-/tests export-ignore
+/Tests export-ignore
 
 /*.DS_store export-ignore
 /.DS_store? export-ignore
