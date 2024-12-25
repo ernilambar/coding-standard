@@ -22,26 +22,27 @@ trait CommentTrait {
 	 * @since 1.0.0
 	 *
 	 * @param File $phpcsFile The PHPCS file object.
-	 * @param int  $commentStart The starting position (token index) of the comment.
-	 * @param int  $commentEnd   The ending position (token index) of the comment.
-	 * @return array An array of tags, with tag names as keys.  Returns an empty array if no tags are found or if the range is invalid.
+	 * @param int  $commentStart The starting position of the comment.
+	 * @return array An array of tags.
 	 */
-	protected function find_comment_tags( File $phpcsFile, int $commentStart, int $commentEnd ): array {
-		if ( $commentEnd < $commentStart ) {
+	protected function find_comment_tags( File $phpcsFile, int $commentStart ): array {
+		$tokens = $phpcsFile->getTokens();
+
+		$commentTags = ! empty( $tokens[ $commentStart ]['comment_tags'] ) ? $tokens[ $commentStart ]['comment_tags'] : [];
+
+		if ( empty( $commentTags ) ) {
 			return [];
 		}
 
 		$tags = [];
 
-		for ( $i = $commentStart + 1; $i < $commentEnd; $i++ ) {
-			$token = $phpcsFile->getTokens()[ $i ];
+		foreach ( $commentTags as $commentTag ) {
+			if ( T_DOC_COMMENT_TAG === $tokens[ $commentTag ]['code'] ) {
+				$tag = $tokens[ $commentTag ];
 
-			if ( T_DOC_COMMENT_TAG === $token['code'] && 0 === strpos( $token['content'], '@' ) ) {
-				$item = $token;
+				$tag['tag'] = $commentTag;
 
-				$item['tag'] = $i;
-
-				$tags[] = $item;
+				$tags[] = $tag;
 			}
 		}
 

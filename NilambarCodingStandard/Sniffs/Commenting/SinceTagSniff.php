@@ -60,9 +60,9 @@ final class SinceTagSniff extends Sniff {
 		}
 
 		// Current entity.
-		$entity = $this->get_entity_name( $this->phpcsFile, $stackPtr, $tokens );
+		$entity = $this->get_entity_name( $this->phpcsFile, $stackPtr );
 
-		$allTags = $this->find_comment_tags( $this->phpcsFile, $commentStart, $commentEnd );
+		$allTags = $this->find_comment_tags( $this->phpcsFile, $commentStart );
 
 		$sinceTags = array_filter(
 			$allTags,
