@@ -1,20 +1,20 @@
 <?php
 /**
- * GetEntityName
+ * EntityTrait
  *
  * @package Nilambar_Coding_Standard
  */
 
-namespace NilambarCodingStandard\Traits;
+namespace NilambarCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
 
 /**
- * Trait GetEntityName.
+ * EntityTrait.
  *
  * @since 1.0.0
  */
-trait GetEntityName {
+trait EntityTrait {
 
 	/**
 	 * Get entity name.
@@ -24,9 +24,9 @@ trait GetEntityName {
 	 * @param File  $phpcsFile The PHP_CodeSniffer file where the token was found.
 	 * @param int   $stackPtr  Current position.
 	 * @param array $tokens    Token stack for this file.
-	 * @return string Entity full name.
+	 * @return string Entity name.
 	 */
-	protected function get_entity_full_name( File $phpcsFile, int $stackPtr, array $tokens ): string {
+	protected function get_entity_name( File $phpcsFile, int $stackPtr, array $tokens ): string {
 		$suffix = $this->get_suffix( $tokens[ $stackPtr ]['code'] );
 
 		if ( T_CONST === $tokens[ $stackPtr ]['code'] ) {

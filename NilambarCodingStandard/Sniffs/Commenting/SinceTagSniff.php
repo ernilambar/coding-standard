@@ -7,8 +7,8 @@
 
 namespace NilambarCodingStandard\Sniffs\Commenting;
 
-use NilambarCodingStandard\Traits\CommentTag;
-use NilambarCodingStandard\Traits\GetEntityName;
+use NilambarCodingStandard\Helpers\CommentTrait;
+use NilambarCodingStandard\Helpers\EntityTrait;
 use WordPressCS\WordPress\Sniff;
 
 /**
@@ -18,8 +18,8 @@ use WordPressCS\WordPress\Sniff;
  */
 final class SinceTagSniff extends Sniff {
 
-	use CommentTag;
-	use GetEntityName;
+	use CommentTrait;
+	use EntityTrait;
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -60,9 +60,9 @@ final class SinceTagSniff extends Sniff {
 		}
 
 		// Current entity.
-		$entity = $this->get_entity_full_name( $this->phpcsFile, $stackPtr, $tokens );
+		$entity = $this->get_entity_name( $this->phpcsFile, $stackPtr, $tokens );
 
-		$allTags = $this->find_tags( $this->phpcsFile, $commentStart, $commentEnd );
+		$allTags = $this->find_comment_tags( $this->phpcsFile, $commentStart, $commentEnd );
 
 		$sinceTags = array_filter(
 			$allTags,

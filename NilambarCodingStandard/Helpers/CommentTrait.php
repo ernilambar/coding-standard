@@ -1,30 +1,32 @@
 <?php
 /**
- * CommentTag
+ * CommentTrait
  *
  * @package Nilambar_Coding_Standard
  */
 
-namespace NilambarCodingStandard\Traits;
+namespace NilambarCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
 
 /**
- * Trait CommentTag.
+ * CommentTrait.
  *
  * @since 1.0.0
  */
-trait CommentTag {
+trait CommentTrait {
 
 	/**
 	 * Find all tags in PHPDoc.
+	 *
+	 * @since 1.0.0
 	 *
 	 * @param File $phpcsFile The PHPCS file object.
 	 * @param int  $commentStart The starting position (token index) of the comment.
 	 * @param int  $commentEnd   The ending position (token index) of the comment.
 	 * @return array An array of tags, with tag names as keys.  Returns an empty array if no tags are found or if the range is invalid.
 	 */
-	protected function find_tags( File $phpcsFile, int $commentStart, int $commentEnd ): array {
+	protected function find_comment_tags( File $phpcsFile, int $commentStart, int $commentEnd ): array {
 		if ( $commentEnd < $commentStart ) {
 			return [];
 		}
