@@ -64,11 +64,13 @@ trait CommentTrait {
 		// Move backwards to find the previous significant token that's not a comment or whitespace.
 		$prevTokenPos = $phpcsFile->findPrevious(
 			[
-				\T_WHITESPACE,
+				\T_ABSTRACT,
 				\T_COMMENT,
-				\T_PUBLIC,
-				\T_PROTECTED,
 				\T_PRIVATE,
+				\T_PROTECTED,
+				\T_PUBLIC,
+				\T_STATIC,
+				\T_WHITESPACE,
 			],
 			$stackPtr - 1,
 			null,

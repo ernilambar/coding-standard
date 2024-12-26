@@ -113,7 +113,7 @@ function function_nine() {
 /**
  * Class Class_one.
  */
-class Class_one {
+abstract class Class_one {
   /**
    * Function.
    *
@@ -123,7 +123,12 @@ class Class_one {
     echo "Say hello.";
   }
 
-  public function say_hola() {
+  /**
+   * Another function.
+   *
+   * @see link
+   */
+  public static function say_hola() {
     echo "Say hola.";
   }
 }
