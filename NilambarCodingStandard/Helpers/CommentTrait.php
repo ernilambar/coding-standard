@@ -61,15 +61,26 @@ trait CommentTrait {
 	protected function has_doc_block( File $phpcsFile, int $stackPtr ): bool {
 		$tokens = $phpcsFile->getTokens();
 
-		// Find the previous non-whitespace token.
-		$prevTokenPos = $phpcsFile->findPrevious( [ \T_WHITESPACE ], $stackPtr - 1, null, true );
+		// Move backwards to find the previous significant token that's not a comment or whitespace.
+		$prevTokenPos = $phpcsFile->findPrevious(
+			[
+				\T_WHITESPACE,
+				\T_COMMENT,
+				\T_PUBLIC,
+				\T_PROTECTED,
+				\T_PRIVATE,
+			],
+			$stackPtr - 1,
+			null,
+			true
+		);
 
 		if ( false !== $prevTokenPos && \T_DOC_COMMENT_CLOSE_TAG === $tokens[ $prevTokenPos ]['code'] ) {
 			// Ensure the comment block actually opens correctly.
 			$commentStart = $phpcsFile->findPrevious( \T_DOC_COMMENT_OPEN_TAG, $prevTokenPos );
 
 			if ( false !== $commentStart ) {
-				// Verify the tokens are a contiguous comment block up to our $prevTokenPos.
+				// Verify the tokens form a contiguous PHPDoc comment block.
 				for ( $i = $commentStart; $i <= $prevTokenPos; $i++ ) {
 					if ( ! in_array(
 						$tokens[ $i ]['code'],
@@ -83,7 +94,7 @@ trait CommentTrait {
 						],
 						true
 					) ) {
-						// If any other token is between, it's not a contiguous block.
+						// If there's any interruption in the block, it isn't contiguous.
 						return false;
 					}
 				}

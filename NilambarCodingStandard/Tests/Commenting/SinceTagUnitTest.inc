@@ -109,3 +109,21 @@ function function_eight() {
 
 function function_nine() {
 }
+
+/**
+ * Class Class_one.
+ */
+class Class_one {
+  /**
+   * Function.
+   *
+   * @see text
+   */
+  public function say_hello() {
+    echo "Say hello.";
+  }
+
+  public function say_hola() {
+    echo "Say hola.";
+  }
+}
