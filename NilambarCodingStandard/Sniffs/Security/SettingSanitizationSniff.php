@@ -7,6 +7,7 @@
 
 namespace NilambarCodingStandard\Sniffs\Security;
 
+use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
@@ -70,13 +71,30 @@ final class SettingSanitizationSniff extends AbstractFunctionParameterSniff {
 
 		$content = TextStrings::stripQuotes( $third_param['clean'] );
 
-		if ( is_numeric( $content ) || in_array( strtolower( $content ), [ 'true', 'false' ], true ) ) {
+		if ( is_numeric( $content ) || in_array( strtolower( $content ), [ 'true', 'false', 'null' ], true ) ) {
 			$this->phpcsFile->addError(
 				'Invalid sanitization in third parameter of %s().',
 				$stackPtr,
 				$error_code . 'Invalid',
 				[ $matched_content ]
 			);
+
+			return;
+		}
+
+		$next_token = $this->phpcsFile->findNext( Tokens::$emptyTokens, $third_param['start'], ( $third_param['end'] + 1 ), true );
+
+		if ( false !== $next_token ) {
+			$next_type = $this->tokens[ $next_token ]['type'];
+
+			if ( in_array( $next_type, [ 'T_ARRAY','T_OPEN_SHORT_ARRAY','T_VARIABLE', 'T_CALLABLE' ], true ) ) {
+				$this->phpcsFile->addWarning(
+					'Dynamic argument passed in third parameter of %s(). Please ensure proper sanitization.',
+					$stackPtr,
+					$error_code . 'Dynamic',
+					[ $matched_content ]
+				);
+			}
 		}
 	}
 }
