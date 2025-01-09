@@ -36,7 +36,12 @@ final class SettingSanitizationUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return [];
+		return [
+			7  => 1,
+			9  => 1,
+			21 => 1,
+			23 => 1,
+		];
 	}
 
 	/**
