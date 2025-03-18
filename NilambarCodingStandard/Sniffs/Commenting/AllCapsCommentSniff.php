@@ -40,7 +40,7 @@ final class AllCapsCommentSniff extends Sniff {
 		$commentText = preg_replace( '/^\s*(\/\/|#|\/\*|\*\/)/', '', $content );
 		$commentText = trim( $commentText );
 
-		if ( strtoupper( $commentText ) === $commentText ) {
+		if ( preg_match( '/[a-z]/i', $commentText ) && strtoupper( $commentText ) === $commentText ) {
 			$this->phpcsFile->addWarning(
 				'Avoid using all capital letters in comments.',
 				$stackPtr,
