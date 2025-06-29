@@ -113,7 +113,16 @@ final class I18nFunctionParametersSniff extends AbstractFunctionParameterSniff {
 		}
 	}
 
-	protected function determineParameterType( $start, $end ) {
+	/**
+	 * Determines the parameter type based on token analysis.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $start Starting token pointer.
+	 * @param int $end   Ending token pointer.
+	 * @return string Detected type.
+	 */
+	protected function determineParameterType( int $start, int $end ): string {
 		$tokens = $this->phpcsFile->getTokens();
 
 		$firstMeaningfulToken = $this->phpcsFile->findNext( [ T_WHITESPACE, T_COMMENT ], $start, $end + 1, true );
@@ -148,6 +157,14 @@ final class I18nFunctionParametersSniff extends AbstractFunctionParameterSniff {
 		return 'mixed';
 	}
 
+	/**
+	 * Checks if string contains non-ASCII characters.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $input_string String to check.
+	 * @return bool True if non-ASCII characters are found, false otherwise.
+	 */
 	private function hasNonEnglishChars( string $input_string ): bool {
 		if ( '' === $input_string ) {
 			return false;
