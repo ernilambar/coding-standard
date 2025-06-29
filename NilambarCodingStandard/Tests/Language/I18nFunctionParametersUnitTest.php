@@ -1,20 +1,20 @@
 <?php
 /**
- * Unit tests for EnglishFunctionParametersSniff.
+ * Unit tests for I18nFunctionParametersSniff.
  *
  * @package Nilambar_Coding_Standard
  */
 
-namespace NilambarCodingStandard\Tests\CodeAnalysis;
+namespace NilambarCodingStandard\Tests\Language;
 
-use NilambarCodingStandard\Sniffs\CodeAnalysis\EnglishFunctionParametersSniff;
+use NilambarCodingStandard\Sniffs\Language\I18nFunctionParametersSniff;
 use NilambarCodingStandard\Tests\AbstractSniffUnitTest;
 use PHP_CodeSniffer\Sniffs\Sniff;
 
 /**
- * Unit tests for EnglishFunctionParametersSniff.
+ * Unit tests for I18nFunctionParametersSniff.
  */
-final class EnglishFunctionParametersUnitTest extends AbstractSniffUnitTest {
+final class I18nFunctionParametersUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -33,7 +33,8 @@ final class EnglishFunctionParametersUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return [
 			3  => 1,
-			14 => 1,
+			13 => 2,
+			16 => 1,
 		];
 	}
 
@@ -43,7 +44,7 @@ final class EnglishFunctionParametersUnitTest extends AbstractSniffUnitTest {
 	 * @return string The fully qualified class name of the sniff.
 	 */
 	protected function get_sniff_fqcn() {
-		return EnglishFunctionParametersSniff::class;
+		return I18nFunctionParametersSniff::class;
 	}
 
 	/**

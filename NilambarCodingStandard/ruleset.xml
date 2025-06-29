@@ -3,11 +3,11 @@
 
 	<description>Nilambar coding standards</description>
 
-	<rule ref="NilambarCodingStandard.CodeAnalysis.EnglishFunctionParameters" />
 	<rule ref="NilambarCodingStandard.CodeAnalysis.RequiredFunctionParameters" />
 	<rule ref="NilambarCodingStandard.CodeAnalysis.RestrictedConstants" />
 	<rule ref="NilambarCodingStandard.Commenting.AllCapsComment" />
 	<rule ref="NilambarCodingStandard.Commenting.SinceTag" />
+	<rule ref="NilambarCodingStandard.Language.I18nFunctionParameters" />
 	<rule ref="NilambarCodingStandard.Security.SettingSanitization" />
 
 </ruleset>

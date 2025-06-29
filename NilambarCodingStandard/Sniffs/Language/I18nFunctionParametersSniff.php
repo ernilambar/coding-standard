@@ -1,11 +1,11 @@
 <?php
 /**
- * EnglishFunctionParametersSniff
+ * I18nFunctionParametersSniff
  *
  * @package Nilambar_Coding_Standard
  */
 
-namespace NilambarCodingStandard\Sniffs\CodeAnalysis;
+namespace NilambarCodingStandard\Sniffs\Language;
 
 use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\PassedParameters;
@@ -13,11 +13,11 @@ use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
- * Detect missing required function parameters.
+ * Detect function parameters.
  *
  * @since 1.0.0
  */
-final class EnglishFunctionParametersSniff extends AbstractFunctionParameterSniff {
+final class I18nFunctionParametersSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * List of functions to examine.
@@ -38,6 +38,14 @@ final class EnglishFunctionParametersSniff extends AbstractFunctionParameterSnif
 		'add_settings_field' => [
 			2 => [
 				'name' => 'title',
+			],
+		],
+		'add_submenu_page'   => [
+			2 => [
+				'name' => 'page_title',
+			],
+			3 => [
+				'name' => 'menu_title',
 			],
 		],
 	];
@@ -94,7 +102,7 @@ final class EnglishFunctionParametersSniff extends AbstractFunctionParameterSnif
 					$this->phpcsFile->addWarning(
 						'The "%s" parameter for function %s() has non-English text.',
 						$stackPtr,
-						$error_code . 'Detected',
+						$error_code . 'NonEnglishDetected',
 						[
 							$param_item['name'],
 							$matched_content,
