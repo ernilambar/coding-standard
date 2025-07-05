@@ -35,6 +35,11 @@ final class I18nFunctionParametersUnitTest extends AbstractSniffUnitTest {
 			3  => 1,
 			13 => 2,
 			16 => 1,
+			19 => 1,
+			22 => 1,
+			25 => 1,
+			28 => 1,
+			31 => 1,
 		];
 	}
 

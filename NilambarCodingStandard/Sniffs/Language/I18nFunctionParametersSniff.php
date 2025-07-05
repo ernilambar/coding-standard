@@ -27,7 +27,7 @@ final class I18nFunctionParametersSniff extends AbstractFunctionParameterSniff {
 	 * @var array
 	 */
 	protected $target_functions = [
-		'add_menu_page'      => [
+		'add_menu_page'           => [
 			1 => [
 				'name' => 'page_title',
 			],
@@ -35,17 +35,45 @@ final class I18nFunctionParametersSniff extends AbstractFunctionParameterSniff {
 				'name' => 'menu_title',
 			],
 		],
-		'add_settings_field' => [
+		'add_meta_box'            => [
 			2 => [
 				'name' => 'title',
 			],
 		],
-		'add_submenu_page'   => [
+		'add_options_page'        => [
+			1 => [
+				'name' => 'page_title',
+			],
+			2 => [
+				'name' => 'menu_title',
+			],
+		],
+		'add_settings_field'      => [
+			2 => [
+				'name' => 'title',
+			],
+		],
+		'add_settings_section'    => [
+			2 => [
+				'name' => 'title',
+			],
+		],
+		'add_submenu_page'        => [
 			2 => [
 				'name' => 'page_title',
 			],
 			3 => [
 				'name' => 'menu_title',
+			],
+		],
+		'register_nav_menu'       => [
+			2 => [
+				'name' => 'description',
+			],
+		],
+		'wp_add_dashboard_widget' => [
+			2 => [
+				'name' => 'widget_name',
 			],
 		],
 	];
