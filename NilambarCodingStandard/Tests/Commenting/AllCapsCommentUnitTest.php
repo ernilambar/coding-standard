@@ -38,6 +38,9 @@ final class AllCapsCommentUnitTest extends AbstractSniffUnitTest {
 			20 => 1,
 			22 => 1,
 			25 => 1,
+			31 => 1,
+			32 => 1,
+			67 => 1,
 		];
 	}
 

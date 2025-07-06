@@ -22,7 +22,10 @@ final class AllCapsCommentSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return [ \T_COMMENT ];
+		return [
+			\T_COMMENT,
+			\T_DOC_COMMENT,
+		];
 	}
 
 	/**
@@ -36,16 +39,29 @@ final class AllCapsCommentSniff extends Sniff {
 	public function process_token( $stackPtr ) {
 		$content = $this->tokens[ $stackPtr ]['content'];
 
-		// Remove the comment characters (//, /*, */, #) and trim whitespace.
-		$commentText = preg_replace( '/^\s*(\/\/|#|\/\*|\*\/)/', '', $content );
-		$commentText = trim( $commentText );
+		// Split multi-line comments into lines.
+		$lines = preg_split( '/\R/', $content );
 
-		if ( preg_match( '/[a-z]/i', $commentText ) && strtoupper( $commentText ) === $commentText ) {
-			$this->phpcsFile->addWarning(
-				'Avoid using all capital letters in comments.',
-				$stackPtr,
-				'Found'
-			);
+		foreach ( $lines as $line ) {
+			// Remove comment markers and trim.
+			$line = preg_replace( '/^\s*(\/\/|#|\/\*+|\*\/|\*)/', '', $line );
+			$line = trim( $line );
+
+			// Skip empty lines or lines that are just comment markers.
+			if ( '' === $line ) {
+				continue;
+			}
+
+			// Only check lines with at least one letter.
+			if ( preg_match( '/[a-z]/i', $line ) && strtoupper( $line ) === $line ) {
+				$this->phpcsFile->addWarning(
+					'Avoid using all capital letters in comments.',
+					$stackPtr,
+					'Found'
+				);
+
+				break;
+			}
 		}
 	}
 }
