@@ -132,3 +132,98 @@ abstract class Class_one {
     echo "Say hola.";
   }
 }
+
+/**
+ * Function with empty @since tag.
+ *
+ * @since
+ */
+function function_ten() {
+}
+
+/**
+ * Function with invalid version format - no dots.
+ *
+ * @since 1a2b3c
+ */
+function function_thirteen() {
+}
+
+/**
+ * Function with invalid version format - starts with letter.
+ *
+ * @since v1.0.0
+ */
+function function_fourteen() {
+}
+
+/**
+ * Function with invalid version format - contains letters.
+ *
+ * @since 1.0.0a
+ */
+function function_fifteen() {
+}
+
+/**
+ * Function with @since tag not as first tag.
+ *
+ * @param string $name
+ * @since 1.0.0
+ */
+function function_eighteen() {
+}
+
+/**
+ * Function with multiple @since tags separated by other tags.
+ *
+ * @since 1.0.0
+ * @param int $id
+ * @since 2.0.0
+ */
+function function_twenty() {
+}
+
+/**
+ * Function with multiple @since tags in correct order.
+ *
+ * @since 1.0.0
+ * @since 2.0.0
+ * @since 3.0.0
+ */
+function function_twenty_one() {
+}
+
+/**
+ * Function with @since tag and multi-line description.
+ *
+ * @since 1.0.0 Added new feature
+ *               with multiple lines
+ */
+function function_twenty_three() {
+}
+
+/**
+ * Function with @since tag and leading whitespace.
+ *
+ * @since  1.0.0
+ */
+function function_twenty_five() {
+}
+
+/**
+ * Function with @since tag and extra spaces.
+ *
+ * @since    1.0.0
+ */
+function function_twenty_six() {
+}
+
+/**
+ * Function with @since tag and newline.
+ *
+ * @since 1.0.0
+ * New line description
+ */
+function function_twenty_eight() {
+}

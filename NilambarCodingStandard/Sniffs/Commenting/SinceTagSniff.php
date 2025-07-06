@@ -227,6 +227,8 @@ final class SinceTagSniff extends Sniff {
 			return false;
 		}
 
-		return (bool) preg_match( '/^\d+\.\d+(\.\d+)?/', $version );
+		$version_part = preg_split( '/\s+/', $version )[0];
+
+		return (bool) preg_match( '/^\d+\.\d+(\.\d+)?$/', $version_part );
 	}
 }

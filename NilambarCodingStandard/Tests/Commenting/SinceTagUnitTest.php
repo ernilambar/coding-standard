@@ -36,6 +36,11 @@ final class SinceTagUnitTest extends AbstractSniffUnitTest {
 			116 => 1,
 			122 => 1,
 			131 => 1,
+			139 => 1,
+			147 => 1,
+			155 => 1,
+			163 => 1,
+			180 => 1,
 		];
 	}
 
@@ -46,7 +51,8 @@ final class SinceTagUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return [
-			77 => 1,
+			77  => 1,
+			172 => 1,
 		];
 	}
 
