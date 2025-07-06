@@ -40,6 +40,8 @@ trait CommentTrait {
 			return [];
 		}
 
+		$parsedComment = $this->get_parsed_comment_details( $commentContent );
+
 		$parsedTags = $this->parse_comment_content( $commentContent );
 
 		if ( empty( $parsedTags ) ) {
@@ -194,5 +196,94 @@ trait CommentTrait {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Parse comment details and return structured information.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $commentComment The comment content as string.
+	 * @return array Array with line numbers as keys and parsed details as values.
+	 */
+	protected function get_parsed_comment_details( string $commentComment ): array {
+		$lines  = explode( "\n", $commentComment );
+		$result = [];
+
+		foreach ( $lines as $lineNumber => $line ) {
+			++$lineNumber; // Convert to 1-based indexing
+			$trimmedLine = trim( $line );
+
+			$lineDetails = [
+				'line_type'     => 'unknown',
+				'is_tag'        => false,
+				'tag_name'      => null,
+				'content'       => $trimmedLine,
+				'original_line' => $line,
+			];
+
+			// Check if line is empty or whitespace only
+			if ( empty( $trimmedLine ) ) {
+				$lineDetails['line_type'] = 'empty';
+			}
+			// Check if line is comment opening tag
+			elseif ( '/**' === $trimmedLine ) {
+				$lineDetails['line_type'] = 'comment_open';
+			}
+			// Check if line is comment closing tag
+			elseif ( '*/' === $trimmedLine ) {
+				$lineDetails['line_type'] = 'comment_close';
+			}
+			// Check if line starts with * (comment content)
+			elseif ( strpos( $trimmedLine, '*' ) === 0 ) {
+				$content = trim( substr( $trimmedLine, 1 ) );
+
+				if ( empty( $content ) ) {
+					$lineDetails['line_type'] = 'comment_star';
+				} else {
+					// Check if it's a tag
+					if ( strpos( $content, '@' ) === 0 ) {
+						$lineDetails['line_type'] = 'tag';
+						$lineDetails['is_tag']    = true;
+
+						// Extract tag name
+						$tagParts                = explode( ' ', $content, 2 );
+						$tagName                 = substr( $tagParts[0], 1 ); // Remove @ symbol
+						$lineDetails['tag_name'] = $tagName;
+
+						// Add tag description if present
+						if ( isset( $tagParts[1] ) ) {
+							$lineDetails['tag_description'] = trim( $tagParts[1] );
+						}
+					} else {
+						$lineDetails['line_type'] = 'comment_text';
+						$lineDetails['content']   = $content;
+					}
+				}
+			}
+			// Check if line is a standalone tag (without *)
+			elseif ( strpos( $trimmedLine, '@' ) === 0 ) {
+				$lineDetails['line_type'] = 'tag';
+				$lineDetails['is_tag']    = true;
+
+				// Extract tag name
+				$tagParts                = explode( ' ', $trimmedLine, 2 );
+				$tagName                 = substr( $tagParts[0], 1 ); // Remove @ symbol
+				$lineDetails['tag_name'] = $tagName;
+
+				// Add tag description if present
+				if ( isset( $tagParts[1] ) ) {
+					$lineDetails['tag_description'] = trim( $tagParts[1] );
+				}
+			}
+			// Default to comment text
+			else {
+				$lineDetails['line_type'] = 'comment_text';
+			}
+
+			$result[ $lineNumber ] = $lineDetails;
+		}
+
+		return $result;
 	}
 }

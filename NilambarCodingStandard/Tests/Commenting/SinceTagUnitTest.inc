@@ -227,3 +227,19 @@ function function_twenty_six() {
  */
 function function_twenty_eight() {
 }
+
+/**
+ * Function with @since tag missing empty line before it.
+ * @since 1.0.0
+ */
+function function_missing_empty_line() {
+}
+
+/**
+ * Function with @since tag and other tags, missing empty line before @since.
+ * @since 1.0.0
+ * @param string $name
+ * @return void
+ */
+function function_with_tags_missing_empty_line() {
+}
