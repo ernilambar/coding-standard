@@ -47,6 +47,7 @@ final class SinceTagSniff extends Sniff {
 	 * @SuppressWarnings(PHPMD.NPathComplexity)
 	 */
 	public function process_token( $stackPtr ) {
+		$entity = $this->get_entity_name( $this->phpcsFile, $stackPtr );
 		// Bail if no doc block.
 		if ( ! $this->has_doc_block( $this->phpcsFile, $stackPtr ) ) {
 			return;
@@ -65,9 +66,6 @@ final class SinceTagSniff extends Sniff {
 		if ( false === $commentEnd ) {
 			return;
 		}
-
-		// Current entity.
-		$entity = $this->get_entity_name( $this->phpcsFile, $stackPtr );
 
 		$allTags = $this->find_comment_tags( $this->phpcsFile, $commentStart );
 
@@ -93,13 +91,53 @@ final class SinceTagSniff extends Sniff {
 		// Check for first tag.
 		$firstTag = reset( $allTags );
 
-		if ( '@since' !== $firstTag['content'] ) {
-			$this->phpcsFile->addWarning(
-				'Expected @since as the first tag for %s.',
-				reset( $sinceTags )['tag'],
-				'NotFirst',
-				[ $entity ]
+		if ( '@since' === $firstTag['content'] ) {
+			$commentContent   = $this->get_comment_content( $this->phpcsFile, $commentStart );
+			$commentStartLine = $tokens[ $commentStart ]['line'];
+			$parsedComment    = $this->get_parsed_comment_details( $commentContent, $commentStartLine, $this->phpcsFile, $commentStart );
+
+			// Find the first tag line in the parsed comment.
+			$firstTagLine       = null;
+			$firstTagLineNumber = null;
+			foreach ( $parsedComment as $lineNumber => $lineDetails ) {
+				if ( $lineDetails['is_tag'] ) {
+					$firstTagLine       = $lineDetails;
+					$firstTagLineNumber = $lineNumber;
+					break;
+				}
+			}
+
+			if ( $firstTagLine && 'since' === $firstTagLine['tag_name'] ) {
+				if ( $firstTagLineNumber > 1 ) {
+					$previousLine = $parsedComment[ $firstTagLineNumber - 1 ];
+					// Only warn if the previous line is a description/summary (comment_text).
+					if ( 'comment_text' === $previousLine['line_type'] ) {
+						$this->phpcsFile->addWarning(
+							'Missing empty line before @since tag for %s.',
+							$stackPtr,
+							'MissingEmptyLine',
+							[ $entity ]
+						);
+					}
+				}
+			}
+		} else {
+			// @since is not the first tag, check if there are any @since tags
+			$sinceTags = array_filter(
+				$allTags,
+				function ( $element ) {
+					return '@since' === $element['content'];
+				}
 			);
+
+			if ( ! empty( $sinceTags ) ) {
+				$this->phpcsFile->addWarning(
+					'Expected @since as the first tag for %s.',
+					reset( $sinceTags )['tag'],
+					'NotFirst',
+					[ $entity ]
+				);
+			}
 		}
 
 		foreach ( $sinceTags as $since ) {
