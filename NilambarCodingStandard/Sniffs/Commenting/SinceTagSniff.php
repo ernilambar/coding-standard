@@ -196,7 +196,24 @@ final class SinceTagSniff extends Sniff {
 	 * @return bool True if version is valid, otherwise false.
 	 */
 	private function is_valid_version( array $tag, array $tokens ): bool {
-		$version = $tokens[ ( $tag['tag'] + 2 ) ]['content'];
+		$versionTokenIndex = $tag['tag'] + 2;
+
+		// Check if the token index exists.
+		if ( ! isset( $tokens[ $versionTokenIndex ] ) ) {
+			return false;
+		}
+
+		// Check if the token is a string.
+		if ( \T_DOC_COMMENT_STRING !== $tokens[ $versionTokenIndex ]['code'] ) {
+			return false;
+		}
+
+		$version = $tokens[ $versionTokenIndex ]['content'];
+
+		// Check if version is not empty.
+		if ( empty( $version ) ) {
+			return false;
+		}
 
 		return (bool) preg_match( '/^\d+\.\d+(\.\d+)?/', $version );
 	}
