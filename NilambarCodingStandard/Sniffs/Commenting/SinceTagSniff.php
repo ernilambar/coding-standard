@@ -181,9 +181,21 @@ final class SinceTagSniff extends Sniff {
 	 * @return bool True if version is not empty, otherwise false.
 	 */
 	private function has_version( array $tag, array $tokens ): bool {
-		$version = $tokens[ ( $tag['tag'] + 2 ) ]['content'];
+		$versionTokenIndex = $tag['tag'] + 2;
 
-		return ! empty( $version ) && \T_DOC_COMMENT_STRING === $tokens[ ( $tag['tag'] + 2 ) ]['code'];
+		// Check if the token index exists.
+		if ( ! isset( $tokens[ $versionTokenIndex ] ) ) {
+			return false;
+		}
+
+		// Check if the token is a string.
+		if ( \T_DOC_COMMENT_STRING !== $tokens[ $versionTokenIndex ]['code'] ) {
+			return false;
+		}
+
+		$version = $tokens[ $versionTokenIndex ]['content'];
+
+		return ! empty( $version );
 	}
 
 	/**
