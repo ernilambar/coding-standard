@@ -32,8 +32,12 @@ final class AllCapsCommentUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return [
-			3 => 1,
-			6 => 1,
+			3  => 1,
+			6  => 1,
+			16 => 1,
+			20 => 1,
+			22 => 1,
+			25 => 1,
 		];
 	}
 
