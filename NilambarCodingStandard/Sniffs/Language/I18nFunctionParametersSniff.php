@@ -120,7 +120,7 @@ final class I18nFunctionParametersSniff extends AbstractFunctionParameterSniff {
 			$type = $this->determineParameterType( $found_param['start'], $found_param['end'] );
 
 			if ( 'string' === $type ) {
-				$target_string = trim( TextStrings::stripQuotes( $found_param['raw'] ) );
+				$target_string = trim( TextStrings::stripQuotes( $found_param['clean'] ) );
 
 				$hasChars = $this->hasNonEnglishChars( $target_string );
 

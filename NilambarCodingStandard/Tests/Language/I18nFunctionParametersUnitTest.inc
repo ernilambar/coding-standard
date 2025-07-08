@@ -30,3 +30,12 @@ add_options_page( 'My Options Page', 'My Options', 'manage_options', 'my-options
 
 wp_add_dashboard_widget( 'my_widget', 'こんにちは世界', 'widget_callback' ); // Bad.
 wp_add_dashboard_widget( 'my_widget', 'My Dashboard Widget', 'widget_callback' ); // Good.
+
+add_submenu_page(
+	'custom-notification', // Slug du menu principal de ton plugin.
+	'Quickstart',
+	'Quickstart',
+	'manage_options',
+	'abs_quickstart',
+	'abs_quickstart_admin_page'
+);
