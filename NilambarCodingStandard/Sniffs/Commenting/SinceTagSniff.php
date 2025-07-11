@@ -18,8 +18,8 @@ use WordPressCS\WordPress\Sniff;
  */
 final class SinceTagSniff extends Sniff {
 
-	use CommentTrait;
 	use EntityTrait;
+	use CommentTrait;
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -56,18 +56,24 @@ final class SinceTagSniff extends Sniff {
 		$tokens = $this->phpcsFile->getTokens();
 
 		$commentStart = $this->phpcsFile->findPrevious( \T_DOC_COMMENT_OPEN_TAG, $stackPtr );
-
 		if ( empty( $commentStart ) ) {
 			return;
 		}
-
 		$commentEnd = $this->phpcsFile->findNext( \T_DOC_COMMENT_CLOSE_TAG, ( $commentStart + 1 ) );
-
 		if ( false === $commentEnd ) {
 			return;
 		}
 
-		$allTags = $this->find_comment_tags( $this->phpcsFile, $commentStart );
+		// Use PHPCS's tokenization for tag parsing.
+		$commentTags = ! empty( $tokens[ $commentStart ]['comment_tags'] ) ? $tokens[ $commentStart ]['comment_tags'] : [];
+		$allTags     = [];
+		foreach ( $commentTags as $tagPtr ) {
+			if ( \T_DOC_COMMENT_TAG === $tokens[ $tagPtr ]['code'] ) {
+				$tag        = $tokens[ $tagPtr ];
+				$tag['tag'] = $tagPtr;
+				$allTags[]  = $tag;
+			}
+		}
 
 		$sinceTags = array_filter(
 			$allTags,
@@ -84,18 +90,15 @@ final class SinceTagSniff extends Sniff {
 				'Missing',
 				[ $entity ]
 			);
-
 			return;
 		}
 
 		// Check for first tag.
 		$firstTag = reset( $allTags );
-
 		if ( '@since' === $firstTag['content'] ) {
 			$commentContent   = $this->get_comment_content( $this->phpcsFile, $commentStart );
 			$commentStartLine = $tokens[ $commentStart ]['line'];
 			$parsedComment    = $this->get_parsed_comment_details( $commentContent, $commentStartLine, $this->phpcsFile, $commentStart );
-
 			// Find the first tag line in the parsed comment.
 			$firstTagLine       = null;
 			$firstTagLineNumber = null;
@@ -106,7 +109,6 @@ final class SinceTagSniff extends Sniff {
 					break;
 				}
 			}
-
 			if ( $firstTagLine && 'since' === $firstTagLine['tag_name'] ) {
 				if ( $firstTagLineNumber > 1 ) {
 					$previousLine = $parsedComment[ $firstTagLineNumber - 1 ];
@@ -129,7 +131,6 @@ final class SinceTagSniff extends Sniff {
 					return '@since' === $element['content'];
 				}
 			);
-
 			if ( ! empty( $sinceTags ) ) {
 				$this->phpcsFile->addWarning(
 					'Expected @since as the first tag for %s.',
@@ -141,7 +142,6 @@ final class SinceTagSniff extends Sniff {
 		}
 
 		foreach ( $sinceTags as $since ) {
-
 			// Tag @since should have a version number.
 			if ( ! $this->has_version( $since, $tokens ) ) {
 				$this->phpcsFile->addError(
@@ -150,10 +150,8 @@ final class SinceTagSniff extends Sniff {
 					'MissingVersion',
 					[ $entity ]
 				);
-
 				continue;
 			}
-
 			// Check for valid version for @since tag.
 			if ( ! $this->is_valid_version( $since, $tokens ) ) {
 				$this->phpcsFile->addError(
@@ -167,7 +165,6 @@ final class SinceTagSniff extends Sniff {
 
 		if ( count( $sinceTags ) > 1 ) {
 			$hasProperOrder = $this->isConsecutiveAscendingNumericSeries( array_keys( $sinceTags ) );
-
 			if ( ! $hasProperOrder ) {
 				$this->phpcsFile->addError(
 					'Keep all @since tags together in %s.',
