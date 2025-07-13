@@ -39,3 +39,6 @@ add_submenu_page(
 	'abs_quickstart',
 	'abs_quickstart_admin_page'
 );
+
+add_meta_box( 'my_meta_box', __( 'नमस्ते', 'sample-plugin' ), 'meta_box_callback', 'post' ); // Bad.
+add_meta_box( 'my_meta_box', __( 'Hello World', 'sample-plugin' ), 'meta_box_callback', 'post' ); // Good.
