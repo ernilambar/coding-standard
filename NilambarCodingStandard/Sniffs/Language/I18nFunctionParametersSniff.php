@@ -124,9 +124,9 @@ final class I18nFunctionParametersSniff extends AbstractFunctionParameterSniff {
 				$non_english_chars = $this->analyze_content_language( $target_string );
 				if ( ! empty( $non_english_chars ) ) {
 					$error_code = MessageHelper::stringToErrorCode( $matched_content . '_' . $param_item['name'], true );
-					$details    = ' Found: ' . implode( ' ', $non_english_chars );
+
 					$this->phpcsFile->addWarning(
-						'The "%s" parameter for function %s() has non-English text.' . $details,
+						'The "%s" parameter for function %s() has non-English text.',
 						$stackPtr,
 						$error_code . 'NonEnglishDetected',
 						[
@@ -142,9 +142,9 @@ final class I18nFunctionParametersSniff extends AbstractFunctionParameterSniff {
 					$non_english_chars = $this->analyze_content_language( $string_content );
 					if ( ! empty( $non_english_chars ) ) {
 						$error_code = MessageHelper::stringToErrorCode( $matched_content . '_' . $param_item['name'], true );
-						$details    = ' Found: ' . implode( ' ', $non_english_chars );
+
 						$this->phpcsFile->addWarning(
-							'The "%s" parameter for function %s() has non-English text.' . $details,
+							'The "%s" parameter for function %s() has non-English text.',
 							$stackPtr,
 							$error_code . 'NonEnglishDetected',
 							[
