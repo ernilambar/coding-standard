@@ -35,6 +35,8 @@ alwaysApply: true
   - Use prepare() statements for secure database queries.
   - Implement proper database schema changes using dbDelta() function.
   - Always use Yoda conditions
+  - PHP inline comments should always end with period char.
+
 
   Dependencies
   - WordPress (latest stable version)

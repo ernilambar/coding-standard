@@ -255,10 +255,19 @@ final class I18nFunctionParametersSniff extends AbstractFunctionParameterSniff {
 		$found = [];
 		if ( preg_match_all( '/\P{ASCII}+/u', $content, $matches ) ) {
 			foreach ( $matches[0] as $non_english_sequence ) {
-				preg_match_all( '/./u', $non_english_sequence, $chars );
-				foreach ( $chars[0] as $char ) {
-					if ( ! $this->is_emoji( $char ) ) {
+				// Check if this sequence is primarily non-English text.
+				if ( $this->is_foreign_text( $non_english_sequence ) ) {
+					preg_match_all( '/./u', $non_english_sequence, $chars );
+					foreach ( $chars[0] as $char ) {
 						$found[] = $char;
+					}
+				} else {
+					// Check individual characters.
+					preg_match_all( '/./u', $non_english_sequence, $chars );
+					foreach ( $chars[0] as $char ) {
+						if ( ! $this->is_emoji( $char ) && ! $this->is_allowed_special_char( $char ) ) {
+							$found[] = $char;
+						}
 					}
 				}
 			}
@@ -279,5 +288,60 @@ final class I18nFunctionParametersSniff extends AbstractFunctionParameterSniff {
 			'/([\x{1F600}-\x{1F64F}]|[\x{1F300}-\x{1F5FF}]|[\x{1F680}-\x{1F6FF}]|[\x{2600}-\x{26FF}]|[\x{2700}-\x{27BF}]|[\x{FE00}-\x{FE0F}]|[\x{1F900}-\x{1F9FF}]|[\x{1FA70}-\x{1FAFF}]|[\x{200D}]|[\x{2300}-\x{23FF}])/xu',
 			$str
 		);
+	}
+
+	/**
+	 * Check if a character is an allowed special character using Unicode properties.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $char The character to check.
+	 * @return bool True if the character is an allowed special character, false otherwise.
+	 */
+	private function is_allowed_special_char( string $char ): bool {
+		// Check for common typographic symbols, mathematical symbols, currency symbols, etc.
+		// But exclude non-English scripts.
+		$allowed_patterns = [
+			'/[\p{Pd}]/u',           // Dash punctuation (en-dash, em-dash, etc.).
+			'/[\p{Po}]/u',           // Other punctuation.
+			'/[\p{Sc}]/u',           // Currency symbols.
+			'/[\p{Sm}]/u',           // Mathematical symbols.
+			'/[\p{So}]/u',           // Other symbols.
+			'/[\p{Sk}]/u',           // Modifier symbols.
+			'/[\p{Mc}]/u',           // Spacing combining marks.
+			'/[\p{Me}]/u',           // Enclosing marks.
+			'/[\p{Mn}]/u',           // Non-spacing marks.
+			'/[\p{No}]/u',           // Other number forms.
+			'/[\p{Nl}]/u',           // Letter numbers.
+			'/[\p{Nd}]/u',           // Decimal digit numbers.
+		];
+
+		// Check if character matches any allowed pattern.
+		foreach ( $allowed_patterns as $pattern ) {
+			if ( preg_match( $pattern, $char ) ) {
+				return true;
+			}
+		}
+
+		// Handle Greek letters (U+0370 to U+03FF).
+		if ( preg_match( '/[\x{0370}-\x{03FF}]/u', $char ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if a string contains consecutive foreign letters (likely foreign text).
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $text The text to check.
+	 * @return bool True if the text contains consecutive foreign letters, false otherwise.
+	 */
+	private function is_foreign_text( string $text ): bool {
+		// Look for consecutive non-Latin letters (2 or more in a row).
+		// This indicates actual foreign text rather than individual characters.
+		return (bool) preg_match( '/[\p{L}][\p{L}]+/u', $text );
 	}
 }

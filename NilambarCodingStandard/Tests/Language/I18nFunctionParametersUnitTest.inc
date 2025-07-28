@@ -42,3 +42,7 @@ add_submenu_page(
 
 add_meta_box( 'my_meta_box', __( 'नमस्ते', 'sample-plugin' ), 'meta_box_callback', 'post' ); // Bad.
 add_meta_box( 'my_meta_box', __( 'Hello World', 'sample-plugin' ), 'meta_box_callback', 'post' ); // Good.
+
+// Special chars.
+add_meta_box( 'my_meta_box', __( 'Hello – World', 'sample-plugin' ), 'meta_box_callback', 'post' ); // Good.
+add_meta_box( 'my_meta_box', __( 'Hello World ⭐', 'sample-plugin' ), 'meta_box_callback', 'post' ); // Good.
