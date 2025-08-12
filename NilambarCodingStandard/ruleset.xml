@@ -8,6 +8,7 @@
 	<rule ref="NilambarCodingStandard.Commenting.AllCapsComment" />
 	<rule ref="NilambarCodingStandard.Commenting.SinceTag" />
 	<rule ref="NilambarCodingStandard.Language.I18nFunctionParameters" />
+	<rule ref="NilambarCodingStandard.Language.I18nTextDomain" />
 	<rule ref="NilambarCodingStandard.Security.SettingSanitization" />
 
 </ruleset>
