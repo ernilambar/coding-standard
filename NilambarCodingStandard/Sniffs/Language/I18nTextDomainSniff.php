@@ -55,13 +55,13 @@ final class I18nTextDomainSniff extends AbstractFunctionParameterSniff {
 	private $core_translations = null;
 
 	/**
-	 * Core translations file path.
+	 * Core translations file paths.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @var string
+	 * @var array<string>
 	 */
-	private static $core_translations_file = null;
+	private static $core_translations_files = null;
 
 	/**
 	 * Parameter specifications for the functions in each group.
@@ -190,28 +190,36 @@ final class I18nTextDomainSniff extends AbstractFunctionParameterSniff {
 	}
 
 	/**
-	 * Load core translations from external file.
+	 * Load core translations from external files.
 	 *
 	 * @since 1.0.0
 	 */
 	private function load_core_translations() {
 		if ( null === $this->core_translations ) {
-			// Cache the file path.
-			if ( null === self::$core_translations_file ) {
-				self::$core_translations_file = __DIR__ . '/../../Vars/core-translations.php';
+			// Cache the file paths.
+			if ( null === self::$core_translations_files ) {
+				$vars_dir = __DIR__ . '/../../Vars/';
+
+				self::$core_translations_files = [
+					$vars_dir . 'i18n-admin.php',
+					$vars_dir . 'i18n-core.php',
+				];
 			}
 
-			// Load translations.
-			if ( file_exists( self::$core_translations_file ) ) {
-				$translations = include self::$core_translations_file;
+			$this->core_translations = [];
 
-				if ( is_array( $translations ) ) {
-					$this->core_translations = array_flip( $translations );
-				} else {
-					$this->core_translations = [];
+			// Load translations from both files.
+			foreach ( self::$core_translations_files as $file_path ) {
+				if ( file_exists( $file_path ) ) {
+					$translations = include $file_path;
+
+					if ( is_array( $translations ) ) {
+						// Convert array to associative array with translation as key.
+						foreach ( $translations as $translation ) {
+							$this->core_translations[ $translation ] = 1;
+						}
+					}
 				}
-			} else {
-				$this->core_translations = [];
 			}
 		}
 	}
