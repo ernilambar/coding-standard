@@ -33,6 +33,7 @@ final class I18nTextDomainUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return [
 			2 => 1,
+			5 => 1,
 		];
 	}
 

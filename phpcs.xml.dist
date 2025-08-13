@@ -6,6 +6,7 @@
 	<file>.</file>
 
 	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/NilambarCodingStandard/Vars/*</exclude-pattern>
 
 	<arg name="extensions" value="php"/>
 	<arg value="ps"/>
