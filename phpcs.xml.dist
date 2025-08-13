@@ -5,9 +5,10 @@
 
 	<file>.</file>
 
+	<exclude-pattern>*/bin/*</exclude-pattern>
+	<exclude-pattern>*/data/*</exclude-pattern>
 	<exclude-pattern>*/vendor/*</exclude-pattern>
 	<exclude-pattern>*/NilambarCodingStandard/Vars/*</exclude-pattern>
-	<exclude-pattern>*/data/*</exclude-pattern>
 
 	<arg name="extensions" value="php"/>
 	<arg value="ps"/>
