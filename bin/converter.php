@@ -1,6 +1,13 @@
 <?php
+/**
+ * Generates a PHP file containing exported message keys from a source file.
+ *
+ * @param string $source_file_path Path to the source file to process.
+ * @param string $output_file_path Path where the generated file will be saved.
+ * @param int $buffer_size Number of keys to buffer before writing to file (default: 1000).
+ */
 function ncs_generate_vars_file( string $source_file_path, string $output_file_path, int $buffer_size = 1000 ) {
-	$config_data = include $source_file_path;
+	$source_data = include $source_file_path;
 
 	$file_handle = fopen( $output_file_path, 'w' );
 	fwrite( $file_handle, "<?php\nreturn [\n" );
@@ -8,7 +15,7 @@ function ncs_generate_vars_file( string $source_file_path, string $output_file_p
 	$current_buffer = '';
 	$keys_processed = 0;
 
-	foreach ( array_keys( $config_data['messages'] ) as $key ) {
+	foreach ( array_keys( $source_data['messages'] ) as $key ) {
 		$current_buffer .= '    ' . var_export( $key, true ) . ",\n";
 
 		++$keys_processed;
