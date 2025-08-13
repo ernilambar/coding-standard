@@ -1,3 +1,3 @@
 #!/bin/sh
 
-php -f bin/runner.php
+php -f bin/converter.php
