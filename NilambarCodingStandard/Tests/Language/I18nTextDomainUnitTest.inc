@@ -2,7 +2,7 @@
 __( 'Hello World' ); // Bad - missing domain.
 __( 'Save Changes' ); // Good - core translation.
 _x( 'Duplicate', 'action label' ); // Good - core translation.
-esc_html__( 'Date' ); // Bad - not available in core without context.
+esc_html__( 'Google Fonts' ); // Bad - not available in core without context.
 
 // Good examples (with domain):
 __( 'Hello World', 'my-plugin' ); // Good.

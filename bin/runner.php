@@ -28,5 +28,5 @@ function ncs_generate_vars_file( string $source_file_path, string $output_file_p
 	fclose( $file_handle );
 }
 
-ncs_generate_vars_file( 'data/i18n/core.php', 'NilambarCodingStandard/Vars/core.php' );
-ncs_generate_vars_file( 'data/i18n/admin.php', 'NilambarCodingStandard/Vars/admin.php' );
+ncs_generate_vars_file( 'data/i18n/core.php', 'NilambarCodingStandard/Vars/i18n-core.php' );
+ncs_generate_vars_file( 'data/i18n/admin.php', 'NilambarCodingStandard/Vars/i18n-admin.php' );
