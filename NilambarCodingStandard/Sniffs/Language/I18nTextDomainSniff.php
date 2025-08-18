@@ -175,18 +175,10 @@ final class I18nTextDomainSniff extends AbstractFunctionParameterSniff {
 				// Check if this is a core translation.
 				$is_core_translation = $this->is_core_translation( $parameters, $function_param_specs );
 
-				$error_code = MessageHelper::stringToErrorcode( 'MissingDomain' );
+				// Show error for non-core translations.
+				if ( ! $is_core_translation ) {
+					$error_code = MessageHelper::stringToErrorcode( 'MissingDomain' );
 
-				if ( $is_core_translation ) {
-					// Warning for core translations.
-					$this->phpcsFile->addWarning(
-						'Missing text domain parameter in function call to %s().',
-						$stackPtr,
-						$error_code . 'Default',
-						[ $matched_content ]
-					);
-				} else {
-					// Error for non-core translations.
 					$this->phpcsFile->addError(
 						'Missing text domain parameter in function call to %s().',
 						$stackPtr,

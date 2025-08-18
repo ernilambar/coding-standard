@@ -34,16 +34,7 @@ final class I18nTextDomainUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return [
-			3  => 1,
-			4  => 1,
-			13 => 1,
-			14 => 1,
-			15 => 1,
-			16 => 1,
-			17 => 1,
-			18 => 1,
-		];
+		return [];
 	}
 
 	/**
