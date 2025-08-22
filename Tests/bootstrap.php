@@ -46,5 +46,9 @@ $ignore_standards_string = implode( ',', $ignored_standards );
 // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration_putenv -- This is non-production code.
 putenv( "PHPCS_IGNORE_TESTS={$ignore_standards_string}" );
 
+// Set required global variables for PHPCS tests.
+$GLOBALS['PHP_CODESNIFFER_STANDARD_DIRS'] = [];
+$GLOBALS['PHP_CODESNIFFER_TEST_DIRS']     = [];
+
 // Cleanup.
 unset( $dir_separator, $phpcs_path, $available_standards, $ignored_standards, $available_standard, $ignore_standards_string );
