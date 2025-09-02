@@ -30,7 +30,7 @@ trait CommentTrait {
 
 		// Move backwards to find the previous significant token that's not a comment or whitespace.
 		$prevTokenPos = $phpcsFile->findPrevious(
-			[
+			array(
 				\T_ABSTRACT,
 				\T_COMMENT,
 				\T_PRIVATE,
@@ -38,7 +38,7 @@ trait CommentTrait {
 				\T_PUBLIC,
 				\T_STATIC,
 				\T_WHITESPACE,
-			],
+			),
 			$stackPtr - 1,
 			null,
 			true
@@ -51,14 +51,14 @@ trait CommentTrait {
 				for ( $i = $commentStart; $i <= $prevTokenPos; $i++ ) {
 					if ( ! in_array(
 						$tokens[ $i ]['code'],
-						[
+						array(
 							\T_DOC_COMMENT_OPEN_TAG,
 							\T_DOC_COMMENT_WHITESPACE,
 							\T_DOC_COMMENT_STAR,
 							\T_DOC_COMMENT_TAG,
 							\T_DOC_COMMENT_STRING,
 							\T_DOC_COMMENT_CLOSE_TAG,
-						],
+						),
 						true
 					) ) {
 						return false;
@@ -85,11 +85,11 @@ trait CommentTrait {
 	 */
 	protected function get_parsed_comment_details( string $commentComment, int $commentStartLine = 0, File $phpcsFile = null, int $commentStart = 0 ): array {
 		$lines  = explode( "\n", $commentComment );
-		$result = [];
+		$result = array();
 
 		// If we have PHPCS file and comment start, use token line information for better accuracy.
 		$useTokenLines = ( null !== $phpcsFile && $commentStart > 0 );
-		$tokenLines    = [];
+		$tokenLines    = array();
 
 		if ( $useTokenLines ) {
 			$tokens     = $phpcsFile->getTokens();
@@ -106,13 +106,13 @@ trait CommentTrait {
 			++$lineNumber; // Convert to 1-based indexing.
 			$trimmedLine = trim( $line );
 
-			$lineDetails = [
+			$lineDetails = array(
 				'line_type'     => 'unknown',
 				'is_tag'        => false,
 				'tag_name'      => null,
 				'content'       => $trimmedLine,
 				'original_line' => $line,
-			];
+			);
 
 			// Add actual file line number if provided.
 			if ( $commentStartLine > 0 ) {

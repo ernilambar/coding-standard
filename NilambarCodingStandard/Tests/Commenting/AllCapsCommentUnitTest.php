@@ -22,7 +22,7 @@ final class AllCapsCommentUnitTest extends AbstractSniffUnitTest {
 	 * @return array<int, array<int, string>>
 	 */
 	public function getErrorList() {
-		return [];
+		return array();
 	}
 
 	/**
@@ -31,7 +31,7 @@ final class AllCapsCommentUnitTest extends AbstractSniffUnitTest {
 	 * @return array<int, array<int, string>>
 	 */
 	public function getWarningList() {
-		return [
+		return array(
 			3  => 1,
 			6  => 1,
 			16 => 1,
@@ -41,7 +41,7 @@ final class AllCapsCommentUnitTest extends AbstractSniffUnitTest {
 			31 => 1,
 			32 => 1,
 			67 => 1,
-		];
+		);
 	}
 
 	/**

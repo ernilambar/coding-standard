@@ -37,9 +37,9 @@ final class SettingSanitizationSniff extends AbstractFunctionParameterSniff {
 	 * @var array<string, true> Key is function name, value irrelevant.
 	 */
 
-	protected $target_functions = [
+	protected $target_functions = array(
 		'register_setting' => true,
-	];
+	);
 
 	/**
 	 * Process the parameters of a matched function.
@@ -63,7 +63,7 @@ final class SettingSanitizationSniff extends AbstractFunctionParameterSniff {
 				'Sanitization missing for %s().',
 				$stackPtr,
 				$error_code . 'Missing',
-				[ $matched_content ]
+				array( $matched_content )
 			);
 
 			return;
@@ -71,12 +71,12 @@ final class SettingSanitizationSniff extends AbstractFunctionParameterSniff {
 
 		$content = TextStrings::stripQuotes( $third_param['clean'] );
 
-		if ( is_numeric( $content ) || in_array( strtolower( $content ), [ 'true', 'false', 'null' ], true ) ) {
+		if ( is_numeric( $content ) || in_array( strtolower( $content ), array( 'true', 'false', 'null' ), true ) ) {
 			$this->phpcsFile->addError(
 				'Invalid sanitization in third parameter of %s().',
 				$stackPtr,
 				$error_code . 'Invalid',
-				[ $matched_content ]
+				array( $matched_content )
 			);
 
 			return;
@@ -87,12 +87,12 @@ final class SettingSanitizationSniff extends AbstractFunctionParameterSniff {
 		if ( false !== $next_token ) {
 			$next_type = $this->tokens[ $next_token ]['type'];
 
-			if ( in_array( $next_type, [ 'T_ARRAY','T_OPEN_SHORT_ARRAY','T_VARIABLE', 'T_CALLABLE' ], true ) ) {
+			if ( in_array( $next_type, array( 'T_ARRAY', 'T_OPEN_SHORT_ARRAY', 'T_VARIABLE', 'T_CALLABLE' ), true ) ) {
 				$this->phpcsFile->addWarning(
 					'Dynamic argument passed in third parameter of %s(). Please ensure proper sanitization.',
 					$stackPtr,
 					$error_code . 'Dynamic',
-					[ $matched_content ]
+					array( $matched_content )
 				);
 			}
 		}

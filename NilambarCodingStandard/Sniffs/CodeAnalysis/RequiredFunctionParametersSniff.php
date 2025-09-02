@@ -25,12 +25,12 @@ final class RequiredFunctionParametersSniff extends AbstractFunctionParameterSni
 	 *
 	 * @var array<string, array<string, int|string>> Function name as key, array with target parameter and name as value.
 	 */
-	protected $target_functions = [
-		'parse_str' => [
+	protected $target_functions = array(
+		'parse_str' => array(
 			'position' => 2,
 			'name'     => 'result',
-		],
-	];
+		),
+	);
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -43,7 +43,7 @@ final class RequiredFunctionParametersSniff extends AbstractFunctionParameterSni
 	public function process_token( $stackPtr ) {
 		if ( isset( $this->target_functions[ strtolower( $this->tokens[ $stackPtr ]['content'] ) ] ) ) {
 			// Disallow excluding function groups for this sniff.
-			$this->exclude = [];
+			$this->exclude = array();
 
 			return parent::process_token( $stackPtr );
 		}
@@ -73,10 +73,10 @@ final class RequiredFunctionParametersSniff extends AbstractFunctionParameterSni
 				'The "%s" parameter for function %s() is missing.',
 				$stackPtr,
 				$error_code . 'Missing',
-				[
+				array(
 					$target_param['name'],
 					$matched_content,
-				]
+				)
 			);
 		}
 	}

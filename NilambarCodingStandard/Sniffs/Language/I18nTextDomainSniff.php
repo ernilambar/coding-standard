@@ -26,7 +26,7 @@ final class I18nTextDomainSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @var array<string, string> Key is function name, value is the function type.
 	 */
-	protected $i18n_functions = [
+	protected $i18n_functions = array(
 		'translate'                      => 'simple',
 		'__'                             => 'simple',
 		'esc_attr__'                     => 'simple',
@@ -43,7 +43,7 @@ final class I18nTextDomainSniff extends AbstractFunctionParameterSniff {
 		'_nx'                            => 'number_context',
 		'_n_noop'                        => 'noopnumber',
 		'_nx_noop'                       => 'noopnumber_context',
-	];
+	);
 
 	/**
 	 * Core WordPress translations.
@@ -70,41 +70,41 @@ final class I18nTextDomainSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @var array<string, array> Array of the parameter positions and names.
 	 */
-	private $parameter_specs = [
-		'simple'             => [
+	private $parameter_specs = array(
+		'simple'             => array(
 			1 => 'text',
 			2 => 'domain',
-		],
-		'context'            => [
+		),
+		'context'            => array(
 			1 => 'text',
 			2 => 'context',
 			3 => 'domain',
-		],
-		'number'             => [
+		),
+		'number'             => array(
 			1 => 'single',
 			2 => 'plural',
 			3 => 'number',
 			4 => 'domain',
-		],
-		'number_context'     => [
+		),
+		'number_context'     => array(
 			1 => 'single',
 			2 => 'plural',
 			3 => 'number',
 			4 => 'context',
 			5 => 'domain',
-		],
-		'noopnumber'         => [
+		),
+		'noopnumber'         => array(
 			1 => 'singular',
 			2 => 'plural',
 			3 => 'domain',
-		],
-		'noopnumber_context' => [
+		),
+		'noopnumber_context' => array(
 			1 => 'singular',
 			2 => 'plural',
 			3 => 'context',
 			4 => 'domain',
-		],
-	];
+		),
+	);
 
 	/**
 	 * Groups of functions.
@@ -112,16 +112,16 @@ final class I18nTextDomainSniff extends AbstractFunctionParameterSniff {
 	 * @return array
 	 */
 	public function getGroups() {
-		return [
-			'i18n'  => [
+		return array(
+			'i18n'  => array(
 				'functions' => array_keys( $this->i18n_functions ),
-			],
-			'typos' => [
-				'functions' => [
+			),
+			'typos' => array(
+				'functions' => array(
 					'_',
-				],
-			],
-		];
+				),
+			),
+		);
 	}
 
 	/**
@@ -183,7 +183,7 @@ final class I18nTextDomainSniff extends AbstractFunctionParameterSniff {
 						'Missing text domain parameter in function call to %s().',
 						$stackPtr,
 						$error_code . 'Required',
-						[ $matched_content ]
+						array( $matched_content )
 					);
 				}
 			}
@@ -201,13 +201,13 @@ final class I18nTextDomainSniff extends AbstractFunctionParameterSniff {
 			if ( null === self::$core_translations_files ) {
 				$vars_dir = __DIR__ . '/../../Vars/';
 
-				self::$core_translations_files = [
+				self::$core_translations_files = array(
 					$vars_dir . 'i18n-admin.php',
 					$vars_dir . 'i18n-core.php',
-				];
+				);
 			}
 
-			$this->core_translations = [];
+			$this->core_translations = array();
 
 			// Load translations from both files.
 			foreach ( self::$core_translations_files as $file_path ) {
@@ -245,7 +245,7 @@ final class I18nTextDomainSniff extends AbstractFunctionParameterSniff {
 
 		// Get text parameter.
 		foreach ( $function_param_specs as $position => $name ) {
-			if ( in_array( $name, [ 'text', 'single', 'singular' ], true ) ) {
+			if ( in_array( $name, array( 'text', 'single', 'singular' ), true ) ) {
 				$text_param = PassedParameters::getParameterFromStack( $parameters, $position, $name );
 				break;
 			}

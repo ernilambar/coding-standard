@@ -22,12 +22,12 @@ final class SettingSanitizationUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return [
+		return array(
 			2  => 1,
 			3  => 1,
 			4  => 1,
 			19 => 1,
-		];
+		);
 	}
 
 	/**
@@ -36,12 +36,12 @@ final class SettingSanitizationUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return [
+		return array(
 			7  => 1,
 			9  => 1,
 			21 => 1,
 			23 => 1,
-		];
+		);
 	}
 
 	/**

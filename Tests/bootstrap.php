@@ -31,7 +31,7 @@ require_once $bootstrap_script_path; // Support for PHPUnit 6.x+.
  * Configure the environment to ignore tests from other coding standards.
  */
 $available_standards = Standards::getInstalledStandards();
-$ignored_standards   = [ 'Generic' ];
+$ignored_standards   = array( 'Generic' );
 
 foreach ( $available_standards as $available_standard ) {
 	if ( 'NilambarCodingStandard' === $available_standard ) {

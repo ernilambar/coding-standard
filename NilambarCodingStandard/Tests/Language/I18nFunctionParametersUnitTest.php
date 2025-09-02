@@ -22,7 +22,7 @@ final class I18nFunctionParametersUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return [];
+		return array();
 	}
 
 	/**
@@ -31,7 +31,7 @@ final class I18nFunctionParametersUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return [
+		return array(
 			3  => 1,
 			13 => 2,
 			16 => 1,
@@ -41,7 +41,7 @@ final class I18nFunctionParametersUnitTest extends AbstractSniffUnitTest {
 			28 => 1,
 			31 => 1,
 			43 => 1,
-		];
+		);
 	}
 
 	/**
