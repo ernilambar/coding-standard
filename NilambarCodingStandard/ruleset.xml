@@ -10,5 +10,6 @@
 	<rule ref="NilambarCodingStandard.Language.I18nFunctionParameters" />
 	<rule ref="NilambarCodingStandard.Language.I18nTextDomain" />
 	<rule ref="NilambarCodingStandard.Security.SettingSanitization" />
+	<rule ref="NilambarCodingStandard.Security.VerifyNonce" />
 
 </ruleset>
