@@ -83,18 +83,14 @@ final class VerifyNonceSniff extends AbstractSniffHelper {
 				// We're in a conditional, something like if ( wp_verify_nonce() ).
 
 				if ( $this->expression_is_negated( $stackPtr ) ) {
-					// If !wp_verify_nonce() condition.
-
 					list( $expression_start, $expression_end ) = $this->get_expression_from_condition( $ifPtr );
 					list( $scope_start, $scope_end )           = $this->get_scope_from_condition( $ifPtr );
 
-					// if ( $something && ! wp_verify_nonce( ... ) ).
 					if ( $this->expression_contains_and( $expression_start, $expression_end ) && $this->scope_contains_error_terminator( $scope_start, $scope_end ) ) {
 						$andPtr = $this->expression_contains_and( $expression_start, $expression_end );
 						if ( $andPtr < $stackPtr ) {
 							// if ( ..something.. && ! wp_verify_nonce() ... ).
 							$operand_functions = array_count_values( $this->find_functions_in_expression( $expression_start, $andPtr ) );
-							// if ( ... wp_verify_nonce() && ! wp_verify_nonce() ... ).
 							if ( isset( $operand_functions['wp_verify_nonce'] ) ) {
 								// This is ok, and we will have already checked the previous wp_verify_nonce(), so skip.
 								return;
@@ -108,7 +104,7 @@ final class VerifyNonceSniff extends AbstractSniffHelper {
 							'Unsafe use of wp_verify_nonce() in expression %s.',
 							$stackPtr,
 							'UnsafeVerifyNonceNegatedAnd',
-							array( $this->tokens_as_string( $expression_start, $expression_end ) ), // [ $unsafe_expression, $method, $methodParam[ 'clean' ], rtrim( "\n" . join( "\n", $extra_context ) ) ].
+							array( $this->tokens_as_string( $expression_start, $expression_end ) ),
 							0,
 							false
 						);
@@ -122,7 +118,6 @@ final class VerifyNonceSniff extends AbstractSniffHelper {
 						list( $expression_start, $expression_end ) = $this->get_expression_from_condition( $ifPtr );
 						list( $scope_start, $scope_end )           = $this->get_scope_from_condition( $elsePtr );
 
-						// if ( $something || wp_verify_nonce( ... ) ).
 						if ( $this->expression_contains_or( $expression_start, $expression_end ) && $this->scope_contains_error_terminator( $scope_start, $scope_end ) ) {
 
 							$orPtr = $this->expression_contains_or( $expression_start, $expression_end );
@@ -145,7 +140,7 @@ final class VerifyNonceSniff extends AbstractSniffHelper {
 								'Possibly unsafe use of wp_verify_nonce() in expression %s.',
 								$stackPtr,
 								'UnsafeVerifyNonceElse',
-								array( $this->tokens_as_string( $expression_start, $expression_end ) ), // [ $unsafe_expression, $method, $methodParam[ 'clean' ], rtrim( "\n" . join( "\n", $extra_context ) ) ].
+								array( $this->tokens_as_string( $expression_start, $expression_end ) ),
 								0,
 								false
 							);
