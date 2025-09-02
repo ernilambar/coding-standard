@@ -22,10 +22,10 @@ final class I18nTextDomainUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return [
+		return array(
 			2 => 1,
 			5 => 1,
-		];
+		);
 	}
 
 	/**
@@ -34,7 +34,7 @@ final class I18nTextDomainUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return [];
+		return array();
 	}
 
 	/**

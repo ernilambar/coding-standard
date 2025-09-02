@@ -22,11 +22,11 @@ final class RequiredFunctionParametersUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return [
+		return array(
 			4  => 1,
 			8  => 1,
 			11 => 1,
-		];
+		);
 	}
 
 	/**
@@ -35,7 +35,7 @@ final class RequiredFunctionParametersUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return [];
+		return array();
 	}
 
 	/**

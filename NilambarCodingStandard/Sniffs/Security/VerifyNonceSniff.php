@@ -32,19 +32,19 @@ final class VerifyNonceSniff extends AbstractSniffHelper {
 
 		$tokens_to_search =
 			Tokens::$functionNameTokens +
-			[ \T_RETURN => \T_RETURN ];
+			array( \T_RETURN => \T_RETURN );
 
 		$stackPtr = $this->phpcsFile->findNext( $tokens_to_search, $start, $end, false, null, false );
 		while ( $stackPtr <= $end && $stackPtr ) {
 			if ( in_array(
 				$this->tokens[ $stackPtr ]['content'],
-				[
+				array(
 					'exit',
 					'die',
 					'wp_send_json_error',
 					'wp_nonce_ays',
 					'return',
-				],
+				),
 				true
 			) ) {
 				return $stackPtr;
@@ -108,7 +108,7 @@ final class VerifyNonceSniff extends AbstractSniffHelper {
 							'Unsafe use of wp_verify_nonce() in expression %s.',
 							$stackPtr,
 							'UnsafeVerifyNonceNegatedAnd',
-							[ $this->tokens_as_string( $expression_start, $expression_end ) ], // [ $unsafe_expression, $method, $methodParam[ 'clean' ], rtrim( "\n" . join( "\n", $extra_context ) ) ].
+							array( $this->tokens_as_string( $expression_start, $expression_end ) ), // [ $unsafe_expression, $method, $methodParam[ 'clean' ], rtrim( "\n" . join( "\n", $extra_context ) ) ].
 							0,
 							false
 						);
@@ -145,7 +145,7 @@ final class VerifyNonceSniff extends AbstractSniffHelper {
 								'Possibly unsafe use of wp_verify_nonce() in expression %s.',
 								$stackPtr,
 								'UnsafeVerifyNonceElse',
-								[ $this->tokens_as_string( $expression_start, $expression_end ) ], // [ $unsafe_expression, $method, $methodParam[ 'clean' ], rtrim( "\n" . join( "\n", $extra_context ) ) ].
+								array( $this->tokens_as_string( $expression_start, $expression_end ) ), // [ $unsafe_expression, $method, $methodParam[ 'clean' ], rtrim( "\n" . join( "\n", $extra_context ) ) ].
 								0,
 								false
 							);
@@ -159,7 +159,7 @@ final class VerifyNonceSniff extends AbstractSniffHelper {
 						'Unconditional call to wp_verify_nonce(). Consider using check_admin_referer() instead.',
 						$stackPtr,
 						'UnsafeVerifyNonceStatement',
-						[],
+						array(),
 						0,
 						false
 					);

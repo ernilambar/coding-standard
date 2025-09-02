@@ -15,16 +15,15 @@
 	<arg name="basepath" value="."/>
 	<arg name="parallel" value="8"/>
 
+	<!-- For CI, don't fail on warnings -->
+	<config name="ignore_warnings_on_exit" value="1"/>
+
 	<!-- SET UP THE RULESETS -->
 	<rule ref="WordPress">
+		<!-- This project needs to comply with naming standards from PHPCS, not WP. -->
 		<exclude name="WordPress.Files.FileName"/>
 		<exclude name="WordPress.NamingConventions.ValidVariableName"/>
-		<exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
-		<exclude name="Generic.Functions.CallTimePassByReference"/>
 	</rule>
-
-	<!-- Enforce short arrays. -->
-	<rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
 
 	<rule ref="Squiz.Commenting.FunctionCommentThrowTag.Missing">
 		<exclude-pattern>/NilambarCodingStandard/Tests/.+$</exclude-pattern>

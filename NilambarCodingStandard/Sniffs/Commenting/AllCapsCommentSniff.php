@@ -22,10 +22,10 @@ final class AllCapsCommentSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return [
+		return array(
 			\T_COMMENT,
 			\T_DOC_COMMENT,
-		];
+		);
 	}
 
 	/**

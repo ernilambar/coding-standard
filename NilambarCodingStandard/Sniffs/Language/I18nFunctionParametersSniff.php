@@ -26,57 +26,57 @@ final class I18nFunctionParametersSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @var array
 	 */
-	protected $target_functions = [
-		'add_menu_page'           => [
-			1 => [
+	protected $target_functions = array(
+		'add_menu_page'           => array(
+			1 => array(
 				'name' => 'page_title',
-			],
-			2 => [
+			),
+			2 => array(
 				'name' => 'menu_title',
-			],
-		],
-		'add_meta_box'            => [
-			2 => [
+			),
+		),
+		'add_meta_box'            => array(
+			2 => array(
 				'name' => 'title',
-			],
-		],
-		'add_options_page'        => [
-			1 => [
+			),
+		),
+		'add_options_page'        => array(
+			1 => array(
 				'name' => 'page_title',
-			],
-			2 => [
+			),
+			2 => array(
 				'name' => 'menu_title',
-			],
-		],
-		'add_settings_field'      => [
-			2 => [
+			),
+		),
+		'add_settings_field'      => array(
+			2 => array(
 				'name' => 'title',
-			],
-		],
-		'add_settings_section'    => [
-			2 => [
+			),
+		),
+		'add_settings_section'    => array(
+			2 => array(
 				'name' => 'title',
-			],
-		],
-		'add_submenu_page'        => [
-			2 => [
+			),
+		),
+		'add_submenu_page'        => array(
+			2 => array(
 				'name' => 'page_title',
-			],
-			3 => [
+			),
+			3 => array(
 				'name' => 'menu_title',
-			],
-		],
-		'register_nav_menu'       => [
-			2 => [
+			),
+		),
+		'register_nav_menu'       => array(
+			2 => array(
 				'name' => 'description',
-			],
-		],
-		'wp_add_dashboard_widget' => [
-			2 => [
+			),
+		),
+		'wp_add_dashboard_widget' => array(
+			2 => array(
 				'name' => 'widget_name',
-			],
-		],
-	];
+			),
+		),
+	);
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -89,7 +89,7 @@ final class I18nFunctionParametersSniff extends AbstractFunctionParameterSniff {
 	public function process_token( $stackPtr ) {
 		if ( isset( $this->target_functions[ strtolower( $this->tokens[ $stackPtr ]['content'] ) ] ) ) {
 			// Disallow excluding function groups for this sniff.
-			$this->exclude = [];
+			$this->exclude = array();
 
 			return parent::process_token( $stackPtr );
 		}
@@ -129,10 +129,10 @@ final class I18nFunctionParametersSniff extends AbstractFunctionParameterSniff {
 						'The "%s" parameter for function %s() has non-English text.',
 						$stackPtr,
 						$error_code . 'NonEnglishDetected',
-						[
+						array(
 							$param_item['name'],
 							$matched_content,
-						]
+						)
 					);
 				}
 			} elseif ( 'function_call' === $type ) {
@@ -147,10 +147,10 @@ final class I18nFunctionParametersSniff extends AbstractFunctionParameterSniff {
 							'The "%s" parameter for function %s() has non-English text.',
 							$stackPtr,
 							$error_code . 'NonEnglishDetected',
-							[
+							array(
 								$param_item['name'],
 								$matched_content,
-							]
+							)
 						);
 					}
 				}
@@ -170,7 +170,7 @@ final class I18nFunctionParametersSniff extends AbstractFunctionParameterSniff {
 	protected function determineParameterType( int $start, int $end ): string {
 		$tokens = $this->phpcsFile->getTokens();
 
-		$firstMeaningfulToken = $this->phpcsFile->findNext( [ T_WHITESPACE, T_COMMENT ], $start, $end + 1, true );
+		$firstMeaningfulToken = $this->phpcsFile->findNext( array( T_WHITESPACE, T_COMMENT ), $start, $end + 1, true );
 
 		if ( false === $firstMeaningfulToken ) {
 			return 'mixed';
@@ -199,7 +199,7 @@ final class I18nFunctionParametersSniff extends AbstractFunctionParameterSniff {
 				return 'callable';
 			case T_STRING:
 				// Check if this is a function call.
-				$nextToken = $this->phpcsFile->findNext( [ T_WHITESPACE, T_COMMENT ], $firstMeaningfulToken + 1, $end + 1, true );
+				$nextToken = $this->phpcsFile->findNext( array( T_WHITESPACE, T_COMMENT ), $firstMeaningfulToken + 1, $end + 1, true );
 				if ( false !== $nextToken && T_OPEN_PARENTHESIS === $tokens[ $nextToken ]['code'] ) {
 					return 'function_call';
 				}
@@ -252,7 +252,7 @@ final class I18nFunctionParametersSniff extends AbstractFunctionParameterSniff {
 	 * @return array Array of unique non-English, non-emoji characters found.
 	 */
 	private function analyze_content_language( string $content ): array {
-		$found = [];
+		$found = array();
 		if ( preg_match_all( '/\P{ASCII}+/u', $content, $matches ) ) {
 			foreach ( $matches[0] as $non_english_sequence ) {
 				// Check if this sequence is primarily non-English text.
@@ -301,7 +301,7 @@ final class I18nFunctionParametersSniff extends AbstractFunctionParameterSniff {
 	private function is_allowed_special_char( string $char ): bool {
 		// Check for common typographic symbols, mathematical symbols, currency symbols, etc.
 		// But exclude non-English scripts.
-		$allowed_patterns = [
+		$allowed_patterns = array(
 			'/[\p{Pd}]/u',           // Dash punctuation (en-dash, em-dash, etc.).
 			'/[\p{Po}]/u',           // Other punctuation.
 			'/[\p{Sc}]/u',           // Currency symbols.
@@ -314,7 +314,7 @@ final class I18nFunctionParametersSniff extends AbstractFunctionParameterSniff {
 			'/[\p{No}]/u',           // Other number forms.
 			'/[\p{Nl}]/u',           // Letter numbers.
 			'/[\p{Nd}]/u',           // Decimal digit numbers.
-		];
+		);
 
 		// Check if character matches any allowed pattern.
 		foreach ( $allowed_patterns as $pattern ) {

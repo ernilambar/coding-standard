@@ -25,14 +25,14 @@ abstract class AbstractSniffHelper extends Sniff {
 	 *
 	 * @var array<int, int>
 	 */
-	protected $function_tokens = [
+	protected $function_tokens = array(
 		\T_OBJECT_OPERATOR     => \T_OBJECT_OPERATOR,
 		\T_DOUBLE_COLON        => \T_DOUBLE_COLON,
 		\T_OPEN_CURLY_BRACKET  => \T_OPEN_CURLY_BRACKET,
 		\T_OPEN_SQUARE_BRACKET => \T_OPEN_SQUARE_BRACKET,
 		\T_OPEN_PARENTHESIS    => \T_OPEN_PARENTHESIS,
 		\T_OBJECT              => \T_OBJECT,
-	];
+	);
 
 	/**
 	 * Keep track of variable assignments.
@@ -41,7 +41,7 @@ abstract class AbstractSniffHelper extends Sniff {
 	 *
 	 * @var array<string, array<int, array<int, string>>>
 	 */
-	protected $assignments = [];
+	protected $assignments = array();
 
 	/**
 	 * Used by parent class for providing extra context from some methods.
@@ -209,11 +209,11 @@ abstract class AbstractSniffHelper extends Sniff {
 	 */
 	protected function is_assignment( $stackPtr ) {
 
-		static $valid = [
+		static $valid = array(
 			\T_VARIABLE             => true,
 			\T_CLOSE_SQUARE_BRACKET => true,
 			\T_STRING               => true,
-		];
+		);
 
 		// Must be a variable, constant or closing square bracket (see below).
 		if ( ! isset( $valid[ $this->tokens[ $stackPtr ]['code'] ] ) ) {
@@ -277,7 +277,7 @@ abstract class AbstractSniffHelper extends Sniff {
 			foreach ( array_reverse( $this->tokens[ $stackPtr ]['nested_parenthesis'], true ) as $start => $end ) {
 				if ( isset( $this->tokens[ $start ]['parenthesis_owner'] ) ) {
 					$ownerPtr = $this->tokens[ $start ]['parenthesis_owner'];
-					if ( in_array( $this->tokens[ $ownerPtr ]['code'], [ \T_IF, \T_ELSEIF ], true ) ) {
+					if ( in_array( $this->tokens[ $ownerPtr ]['code'], array( \T_IF, \T_ELSEIF ), true ) ) {
 						return $ownerPtr;
 					}
 				}
@@ -297,7 +297,7 @@ abstract class AbstractSniffHelper extends Sniff {
 	 */
 	protected function get_expression_from_condition( $stackPtr ) {
 		if ( isset( $this->tokens[ $stackPtr ]['parenthesis_opener'] ) ) {
-			return [ $this->tokens[ $stackPtr ]['parenthesis_opener'], $this->tokens[ $stackPtr ]['parenthesis_closer'] ];
+			return array( $this->tokens[ $stackPtr ]['parenthesis_opener'], $this->tokens[ $stackPtr ]['parenthesis_closer'] );
 		}
 		return false;
 	}
@@ -311,22 +311,22 @@ abstract class AbstractSniffHelper extends Sniff {
 	 * @return array<int, int>|false Array with start and end positions or false.
 	 */
 	protected function get_scope_from_condition( $stackPtr ) {
-		if ( ! in_array( $this->tokens[ $stackPtr ]['code'], [ \T_IF, \T_ELSEIF, \T_ELSE ], true ) ) {
+		if ( ! in_array( $this->tokens[ $stackPtr ]['code'], array( \T_IF, \T_ELSEIF, \T_ELSE ), true ) ) {
 			return false;
 		}
 		if ( isset( $this->tokens[ $stackPtr ]['scope_opener'] ) ) {
 			// Has a scope block with curly braces.
-			return [ $this->tokens[ $stackPtr ]['scope_opener'], $this->tokens[ $stackPtr ]['scope_closer'] ];
+			return array( $this->tokens[ $stackPtr ]['scope_opener'], $this->tokens[ $stackPtr ]['scope_closer'] );
 		} elseif ( isset( $this->tokens[ $stackPtr ]['parenthesis_closer'] ) ) {
 			// Has parentheses but no scope block.
 			$start = $this->next_non_empty( $this->tokens[ $stackPtr ]['parenthesis_closer'] + 1 );
 			$end   = $this->phpcsFile->findEndOfStatement( $start );
-			return [ $start, $end ];
+			return array( $start, $end );
 		} else {
 			// No parentheses or scope block.
 			$start = $this->next_non_empty( $stackPtr + 1 );
 			$end   = $this->phpcsFile->findEndOfStatement( $start );
-			return [ $start, $end ];
+			return array( $start, $end );
 		}
 		return false;
 	}
@@ -343,14 +343,14 @@ abstract class AbstractSniffHelper extends Sniff {
 		if ( isset( $this->tokens[ $stackPtr ]['scope_closer'] ) ) {
 			// Has a scope block with curly braces.
 			$nextPtr = $this->next_non_empty( $this->tokens[ $stackPtr ]['scope_closer'] + 1 );
-			if ( $nextPtr && in_array( $this->tokens[ $nextPtr ]['code'], [ \T_ELSE, \T_ELSEIF ], true ) ) {
+			if ( $nextPtr && in_array( $this->tokens[ $nextPtr ]['code'], array( \T_ELSE, \T_ELSEIF ), true ) ) {
 				return $nextPtr;
 			}
 		} else {
 			// No scope block, check after the statement.
 			$endPtr  = $this->phpcsFile->findEndOfStatement( $stackPtr );
 			$nextPtr = $this->next_non_empty( $endPtr + 1 );
-			if ( $nextPtr && in_array( $this->tokens[ $nextPtr ]['code'], [ \T_ELSE, \T_ELSEIF ], true ) ) {
+			if ( $nextPtr && in_array( $this->tokens[ $nextPtr ]['code'], array( \T_ELSE, \T_ELSEIF ), true ) ) {
 				return $nextPtr;
 			}
 		}
@@ -424,18 +424,18 @@ abstract class AbstractSniffHelper extends Sniff {
 	 * @return int|false The position of the 'and' operator or false.
 	 */
 	protected function expression_contains_and( $start, $end, $inside_brackets = false ) {
-		$tokens = [
+		$tokens = array(
 			\T_BOOLEAN_AND => \T_BOOLEAN_AND,
 			\T_LOGICAL_AND => \T_LOGICAL_AND,
-		];
+		);
 
 		if ( $inside_brackets ) {
 			return $this->phpcsFile->findNext( $tokens, $start, $end, false, null, false );
 		}
 
-		$brackets = [
+		$brackets = array(
 			\T_OPEN_PARENTHESIS => \T_OPEN_PARENTHESIS,
-		];
+		);
 
 		$nextPtr = $start;
 		do {
@@ -461,18 +461,18 @@ abstract class AbstractSniffHelper extends Sniff {
 	 * @return int|false The position of the 'or' operator or false.
 	 */
 	protected function expression_contains_or( $start, $end, $inside_brackets = false ) {
-		$tokens = [
+		$tokens = array(
 			\T_BOOLEAN_OR => \T_BOOLEAN_OR,
 			\T_LOGICAL_OR => \T_LOGICAL_OR,
-		];
+		);
 
 		if ( $inside_brackets ) {
 			return $this->phpcsFile->findNext( $tokens, $start, $end, false, null, false );
 		}
 
-		$brackets = [
+		$brackets = array(
 			\T_OPEN_PARENTHESIS => \T_OPEN_PARENTHESIS,
-		];
+		);
 
 		$nextPtr = $start;
 		do {
@@ -531,8 +531,8 @@ abstract class AbstractSniffHelper extends Sniff {
 	 */
 	protected function get_interpolated_variables( $stackPtr ) {
 		// It must be an interpolated string.
-		if ( in_array( $this->tokens[ $stackPtr ]['code'], [ \T_DOUBLE_QUOTED_STRING, \T_HEREDOC ], true ) ) {
-			$out = [];
+		if ( in_array( $this->tokens[ $stackPtr ]['code'], array( \T_DOUBLE_QUOTED_STRING, \T_HEREDOC ), true ) ) {
+			$out = array();
 			// Regex for complex variables in strings.
 			$regex = '/\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)(?:\[[^\]]+\])*(?:->[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)*/';
 			if ( preg_match_all( $regex, $this->tokens[ $stackPtr ]['content'], $matches ) ) {
@@ -558,11 +558,11 @@ abstract class AbstractSniffHelper extends Sniff {
 	 */
 	protected function is_defined_constant( $stackPtr ) {
 		// It must be a string.
-		$ok_tokens = [
+		$ok_tokens = array(
 			\T_SELF,
 			\T_PARENT,
 			\T_STRING,
-		];
+		);
 		if ( ! in_array( $this->tokens[ $stackPtr ]['code'], $ok_tokens, true ) ) {
 			return false;
 		}
@@ -600,11 +600,11 @@ abstract class AbstractSniffHelper extends Sniff {
 			return $this->tokens[ $stackPtr ]['parenthesis_closer'];
 		}
 
-		$stops = [
+		$stops = array(
 			\T_SEMICOLON,
 			\T_COMMA,
 			\T_CLOSE_TAG,
-		];
+		);
 		$prev  = $stackPtr;
 		$next  = $this->next_non_empty( $stackPtr );
 		while ( $next ) {
@@ -656,21 +656,21 @@ abstract class AbstractSniffHelper extends Sniff {
 	 * @return array<string> Array of variable names.
 	 */
 	protected function find_variables_in_expression( $stackPtr, $endPtr = null ) {
-		$tokens_to_find = [
+		$tokens_to_find = array(
 			\T_VARIABLE             => \T_VARIABLE,
 			\T_DOUBLE_QUOTED_STRING => \T_DOUBLE_QUOTED_STRING,
 			\T_HEREDOC              => \T_HEREDOC,
-		];
+		);
 
 		if ( is_null( $endPtr ) ) {
 			$endPtr = $this->find_end_of_expression( $stackPtr );
 		}
 
-		$out = [];
+		$out = array();
 
 		$newPtr = $stackPtr;
 		do {
-			if ( in_array( $this->tokens[ $newPtr ]['code'], [ \T_DOUBLE_QUOTED_STRING, \T_HEREDOC ], true ) ) {
+			if ( in_array( $this->tokens[ $newPtr ]['code'], array( \T_DOUBLE_QUOTED_STRING, \T_HEREDOC ), true ) ) {
 				$out = array_merge( $out, $this->get_interpolated_variables( $newPtr ) );
 			} elseif ( \T_VARIABLE === $this->tokens[ $newPtr ]['code'] ) {
 				$out[] = $this->get_variable_as_string( $newPtr );
@@ -692,11 +692,11 @@ abstract class AbstractSniffHelper extends Sniff {
 	 * @return array<string> Array of function names.
 	 */
 	protected function find_functions_in_expression( $stackPtr, $endPtr = null ) {
-		$out = [];
+		$out = array();
 
 		$newPtr = $stackPtr;
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
-		while ( $newPtr = $this->phpcsFile->findNext( [ \T_STRING ], $newPtr, $endPtr, false, null, true ) ) {
+		while ( $newPtr = $this->phpcsFile->findNext( array( \T_STRING ), $newPtr, $endPtr, false, null, true ) ) {
 			$lookahead = $this->next_non_empty( $newPtr + 1 );
 			if ( $lookahead && ( is_null( $endPtr ) || $lookahead <= $endPtr ) ) {
 				if ( \T_OPEN_PARENTHESIS === $this->tokens[ $lookahead ]['code'] ) {

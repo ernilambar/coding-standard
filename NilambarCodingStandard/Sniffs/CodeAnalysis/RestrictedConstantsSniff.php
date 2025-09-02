@@ -27,9 +27,9 @@ final class RestrictedConstantsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @var array
 	 */
-	protected $restricted_constants = [
+	protected $restricted_constants = array(
 		'ALLOW_UNFILTERED_UPLOADS' => true,
-	];
+	);
 
 	/**
 	 * List of functions to examine.
@@ -38,12 +38,12 @@ final class RestrictedConstantsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @var array<string, array<string, int|string>> Function name as key, array with target parameter and name as value.
 	 */
-	protected $target_functions = [
-		'define' => [
+	protected $target_functions = array(
+		'define' => array(
 			'position' => 1,
 			'name'     => 'constant_name',
-		],
-	];
+		),
+	);
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -56,7 +56,7 @@ final class RestrictedConstantsSniff extends AbstractFunctionParameterSniff {
 	public function process_token( $stackPtr ) {
 		if ( isset( $this->target_functions[ strtolower( $this->tokens[ $stackPtr ]['content'] ) ] ) ) {
 			// Disallow excluding function groups for this sniff.
-			$this->exclude = [];
+			$this->exclude = array();
 
 			return parent::process_token( $stackPtr );
 		}
@@ -91,9 +91,9 @@ final class RestrictedConstantsSniff extends AbstractFunctionParameterSniff {
 				'Found declaration of constant "%s".',
 				$first_non_empty,
 				MessageHelper::stringToErrorcode( $clean_content . 'DeclarationFound' ),
-				[
+				array(
 					$clean_content,
-				]
+				)
 			);
 		}
 	}

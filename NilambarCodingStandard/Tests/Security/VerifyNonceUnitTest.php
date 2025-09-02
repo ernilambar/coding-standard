@@ -29,7 +29,7 @@ final class VerifyNonceUnitTest extends AbstractSniffUnitTest {
 	public function getErrorList( $test_file = '' ) {
 		switch ( $test_file ) {
 			case 'VerifyNonceUnitTest.1.inc':
-				return [
+				return array(
 					5  => 1,
 					11 => 1,
 					16 => 1,
@@ -38,9 +38,9 @@ final class VerifyNonceUnitTest extends AbstractSniffUnitTest {
 					34 => 1,
 					38 => 1,
 					46 => 1,
-				];
+				);
 			default:
-				return [];
+				return array();
 		}
 	}
 
@@ -52,7 +52,7 @@ final class VerifyNonceUnitTest extends AbstractSniffUnitTest {
 	 * @return array<int, int> Key is the line number and value is the number of expected warnings.
 	 */
 	public function getWarningList() {
-		return [];
+		return array();
 	}
 
 	/**

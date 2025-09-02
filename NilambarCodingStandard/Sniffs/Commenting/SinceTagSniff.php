@@ -27,13 +27,13 @@ final class SinceTagSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return [
+		return array(
 			\T_FUNCTION,
 			\T_CLASS,
 			\T_INTERFACE,
 			\T_TRAIT,
 			\T_CONST,
-		];
+		);
 	}
 
 	/**
@@ -65,8 +65,8 @@ final class SinceTagSniff extends Sniff {
 		}
 
 		// Use PHPCS's tokenization for tag parsing.
-		$commentTags = ! empty( $tokens[ $commentStart ]['comment_tags'] ) ? $tokens[ $commentStart ]['comment_tags'] : [];
-		$allTags     = [];
+		$commentTags = ! empty( $tokens[ $commentStart ]['comment_tags'] ) ? $tokens[ $commentStart ]['comment_tags'] : array();
+		$allTags     = array();
 		foreach ( $commentTags as $tagPtr ) {
 			if ( \T_DOC_COMMENT_TAG === $tokens[ $tagPtr ]['code'] ) {
 				$tag        = $tokens[ $tagPtr ];
@@ -88,7 +88,7 @@ final class SinceTagSniff extends Sniff {
 				'Missing @since tag for %s.',
 				$stackPtr,
 				'Missing',
-				[ $entity ]
+				array( $entity )
 			);
 			return;
 		}
@@ -118,7 +118,7 @@ final class SinceTagSniff extends Sniff {
 							'Missing empty line before @since tag for %s.',
 							$stackPtr,
 							'MissingEmptyLine',
-							[ $entity ]
+							array( $entity )
 						);
 					}
 				}
@@ -136,7 +136,7 @@ final class SinceTagSniff extends Sniff {
 					'Expected @since as the first tag for %s.',
 					reset( $sinceTags )['tag'],
 					'NotFirst',
-					[ $entity ]
+					array( $entity )
 				);
 			}
 		}
@@ -148,7 +148,7 @@ final class SinceTagSniff extends Sniff {
 					'Missing @since version for %s.',
 					$since['tag'],
 					'MissingVersion',
-					[ $entity ]
+					array( $entity )
 				);
 				continue;
 			}
@@ -158,7 +158,7 @@ final class SinceTagSniff extends Sniff {
 					'Invalid @since version for %s.',
 					$since['tag'],
 					'InvalidVersion',
-					[ $entity ]
+					array( $entity )
 				);
 			}
 		}
@@ -170,7 +170,7 @@ final class SinceTagSniff extends Sniff {
 					'Keep all @since tags together in %s.',
 					reset( $sinceTags )['tag'],
 					'Ungrouped',
-					[ $entity ]
+					array( $entity )
 				);
 			}
 		}
