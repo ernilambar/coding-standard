@@ -3,6 +3,7 @@
 
 	<description>Nilambar coding standards</description>
 
+	<rule ref="NilambarCodingStandard.CodeAnalysis.Heredoc" />
 	<rule ref="NilambarCodingStandard.CodeAnalysis.RequiredFunctionParameters" />
 	<rule ref="NilambarCodingStandard.CodeAnalysis.RestrictedConstants" />
 	<rule ref="NilambarCodingStandard.Commenting.AllCapsComment" />

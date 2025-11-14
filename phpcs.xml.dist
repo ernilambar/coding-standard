@@ -53,13 +53,13 @@
 	<!-- All references to functions, classes and constants should import using a use statement. -->
 	<rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
 		<properties>
-			<property name="allowFullyQualifiedGlobalFunctions" value="true" />
-			<property name="allowFullyQualifiedGlobalClasses" value="true" />
-			<property name="allowFullyQualifiedGlobalConstants" value="true" />
-			<property name="allowFallbackGlobalFunctions" value="true" />
 			<property name="allowFallbackGlobalConstants" value="true" />
+			<property name="allowFallbackGlobalFunctions" value="true" />
+			<property name="allowFullyQualifiedExceptions" value="false" />
+			<property name="allowFullyQualifiedGlobalClasses" value="false" />
+			<property name="allowFullyQualifiedGlobalConstants" value="true" />
+			<property name="allowFullyQualifiedGlobalFunctions" value="true" />
 			<property name="allowFullyQualifiedNameForCollidingClasses" value="true" />
 		</properties>
 	</rule>
-
 </ruleset>

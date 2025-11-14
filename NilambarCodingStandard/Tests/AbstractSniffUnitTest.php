@@ -11,6 +11,7 @@ use PHP_CodeSniffer\Config;
 use PHP_CodeSniffer\Ruleset;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest as BaseAbstractSniffUnitTest;
+use RuntimeException;
 
 /**
  * An abstract test class that contains common methods for all sniff unit tests.
@@ -66,7 +67,7 @@ abstract class AbstractSniffUnitTest extends BaseAbstractSniffUnitTest {
 		if ( ! isset( $GLOBALS['PHP_CODESNIFFER_RULESETS']['NilambarCodingStandard'] )
 			|| ( ! $GLOBALS['PHP_CODESNIFFER_RULESETS']['NilambarCodingStandard'] instanceof Ruleset )
 		) {
-			throw new \RuntimeException( $error_message ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- this is non-production code.
+			throw new RuntimeException( $error_message ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- this is non-production code.
 		}
 
 		// Backup the original Ruleset instance.
@@ -77,7 +78,7 @@ abstract class AbstractSniffUnitTest extends BaseAbstractSniffUnitTest {
 
 		$sniff_fqcn = $this->get_sniff_fqcn();
 		if ( ! isset( $current_ruleset->sniffs[ $sniff_fqcn ] ) ) {
-			throw new \RuntimeException( $error_message ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- this is non-production code.
+			throw new RuntimeException( $error_message ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- this is non-production code.
 		}
 
 		$sniff = $current_ruleset->sniffs[ $sniff_fqcn ];
