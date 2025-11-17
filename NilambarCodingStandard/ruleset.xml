@@ -6,6 +6,7 @@
 	<rule ref="NilambarCodingStandard.CodeAnalysis.Heredoc" />
 	<rule ref="NilambarCodingStandard.CodeAnalysis.RequiredFunctionParameters" />
 	<rule ref="NilambarCodingStandard.CodeAnalysis.RestrictedConstants" />
+	<rule ref="NilambarCodingStandard.CodeAnalysis.ShortURL" />
 	<rule ref="NilambarCodingStandard.Commenting.AllCapsComment" />
 	<rule ref="NilambarCodingStandard.Commenting.SinceTag" />
 	<rule ref="NilambarCodingStandard.Language.I18nFunctionParameters" />
