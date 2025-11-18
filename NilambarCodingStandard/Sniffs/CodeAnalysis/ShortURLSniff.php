@@ -97,7 +97,7 @@ final class ShortURLSniff extends Sniff {
 		// Compile regex pattern on first use.
 		if ( null === $this->pattern ) {
 			$escaped_domains = array_map( 'preg_quote', $this->short_url_domains, array_fill( 0, count( $this->short_url_domains ), '/' ) );
-			$this->pattern   = '/\b(' . implode( '|', $escaped_domains ) . ')\b/';
+			$this->pattern   = '/https?:\/\/(?:[^\/\s]+\.)?(' . implode( '|', $escaped_domains ) . ')/';
 		}
 
 		// Check if any shortened URL domain is present in the string.
