@@ -32,10 +32,6 @@
 	<!-- Enforce PSR1 compatible namespaces. -->
 	<rule ref="PSR1.Classes.ClassDeclaration"/>
 
-	<!-- Check code for cross-version PHP compatibility. -->
-	<rule ref="PHPCompatibility"/>
-	<config name="testVersion" value="7.4-"/>
-
 	<!-- Disallows grouped use declarations. -->
 	<rule ref="SlevomatCodingStandard.Namespaces.DisallowGroupUse" />
 	<!-- Disallows leading backslash in use statement. -->
