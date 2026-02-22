@@ -20,7 +20,7 @@
     "ext-libxml": "*",
     "ext-tokenizer": "*",
     "ext-xmlreader": "*",
-    "wp-coding-standards/wpcs": "^3.1"
+    "wp-coding-standards/wpcs": "^3.2"
   },
   "require-dev": {
     "php-parallel-lint/php-console-highlighter": "^1.0.0",
