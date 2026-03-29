@@ -20,7 +20,7 @@
     "ext-libxml": "*",
     "ext-tokenizer": "*",
     "ext-xmlreader": "*",
-    "wp-coding-standards/wpcs": "^3.2"
+    "wp-coding-standards/wpcs": "^3.3 || dev-develop"
   },
   "require-dev": {
     "php-parallel-lint/php-console-highlighter": "^1.0.0",
@@ -44,7 +44,7 @@
       "@lint-php",
       "@phpcs"
     ],
-    "lint-php": "@php ./vendor/bin/parallel-lint . -e php --show-deprecated --exclude vendor --exclude .git",
+    "lint-php": "@php ./vendor/bin/parallel-lint . -p php --show-deprecated --exclude vendor --exclude .git",
     "phpcs": "@php ./vendor/bin/phpcs --report-full --report-summary",
     "phpmd": "phpmd . text phpmd.xml",
     "test": "@php ./vendor/phpunit/phpunit/phpunit --filter NilambarCodingStandard ./vendor/squizlabs/php_codesniffer/tests/AllTests.php --no-coverage"
