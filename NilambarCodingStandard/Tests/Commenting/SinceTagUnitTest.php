@@ -52,11 +52,16 @@ final class SinceTagUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
+			68  => 1,
 			77  => 1,
 			172 => 1,
 			233 => 1,
 			240 => 1,
+			241 => 1,
 			315 => 1,
+			367 => 1,
+			378 => 1,
+			388 => 1,
 		);
 	}
 

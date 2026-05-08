@@ -326,3 +326,66 @@ function function_duplicate_since() {
  */
 function function_email_in_description() {
 }
+
+/**
+ * Deprecated function with @since and @deprecated grouped.
+ *
+ * @since 1.0.0
+ * @deprecated 2.0.0 Use new_function() instead.
+ *
+ * @param string $name Name.
+ */
+function function_deprecated_grouped( $name ) {
+}
+
+/**
+ * Function with @since followed by @see and @global (all header group), then @param.
+ *
+ * @since 1.0.0
+ * @see related_function()
+ * @global wpdb $wpdb WordPress database abstraction object.
+ *
+ * @param int $id ID.
+ */
+function function_full_header_group( $id ) {
+}
+
+/**
+ * Function with @since followed only by header-group tags (no blank required).
+ *
+ * @since 1.0.0
+ * @see related_function()
+ * @link https://example.com
+ */
+function function_only_header_group() {
+}
+
+/**
+ * Function missing blank line between @since and @return.
+ *
+ * @since 1.0.0
+ * @return string
+ */
+function function_no_blank_after_since() {
+	return '';
+}
+
+/**
+ * Function missing blank line between @deprecated and @param.
+ *
+ * @since 1.0.0
+ * @deprecated 2.0.0
+ * @param string $name Name.
+ */
+function function_no_blank_after_deprecated( $name ) {
+}
+
+/**
+ * Function with multi-line @since description, then non-header tag without blank.
+ *
+ * @since 1.0.0 Added new feature
+ *              with continuation line.
+ * @param int $id ID.
+ */
+function function_no_blank_after_multiline_since( $id ) {
+}

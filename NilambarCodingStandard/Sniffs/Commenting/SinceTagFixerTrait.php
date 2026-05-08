@@ -17,20 +17,20 @@ namespace NilambarCodingStandard\Sniffs\Commenting;
 trait SinceTagFixerTrait {
 
 	/**
-	 * Insert an empty docblock line directly before the given @since tag.
+	 * Insert an empty docblock line directly before the line containing the given tag.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $since_ptr Stack pointer to the offending @since tag.
+	 * @param int $tag_ptr Stack pointer to the offending docblock tag.
 	 */
-	private function fix_missing_empty_line( int $since_ptr ): void {
+	private function fix_missing_empty_line( int $tag_ptr ): void {
 		$tokens = $this->phpcsFile->getTokens();
 
 		$star_ptr = $this->phpcsFile->findPrevious(
 			\T_DOC_COMMENT_STAR,
-			$since_ptr - 1
+			$tag_ptr - 1
 		);
-		if ( false === $star_ptr || $tokens[ $star_ptr ]['line'] !== $tokens[ $since_ptr ]['line'] ) {
+		if ( false === $star_ptr || $tokens[ $star_ptr ]['line'] !== $tokens[ $tag_ptr ]['line'] ) {
 			return;
 		}
 

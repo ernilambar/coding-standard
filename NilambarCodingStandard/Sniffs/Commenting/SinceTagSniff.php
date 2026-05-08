@@ -24,6 +24,20 @@ final class SinceTagSniff extends Sniff {
 	use SinceTagFixerTrait;
 
 	/**
+	 * Tags that share the @since header group. WordPress documents these as a single
+	 * block (no internal blank lines), separated from @param/@return by one blank line.
+	 *
+	 * @var string[]
+	 */
+	private const HEADER_GROUP_TAGS = array(
+		'@since',
+		'@deprecated',
+		'@see',
+		'@link',
+		'@global',
+	);
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
@@ -107,7 +121,10 @@ final class SinceTagSniff extends Sniff {
 		$this->check_tag_position( $all_tags, $since_tags, $comment_start, $entity );
 		$valid_versions = $this->check_tag_versions( $since_tags, $tokens, $entity );
 		$this->check_duplicate_versions( $since_tags, $valid_versions, $entity );
-		$this->check_grouping( $all_tags, $since_tags, $comment_start, $entity );
+		$grouped = $this->check_grouping( $all_tags, $since_tags, $comment_start, $entity );
+		if ( $grouped ) {
+			$this->check_blank_line_after_group( $all_tags, $since_tags, $comment_start, $entity );
+		}
 	}
 
 	/**
@@ -261,14 +278,15 @@ final class SinceTagSniff extends Sniff {
 	 * @param array<int, array<string, mixed>> $since_tags    @since tags keyed by stack pointer.
 	 * @param int                              $comment_start Pointer to T_DOC_COMMENT_OPEN_TAG.
 	 * @param string                           $entity        Entity label.
+	 * @return bool True when @since tags are contiguous (or only one exists); false when an Ungrouped error fired.
 	 */
-	private function check_grouping( array $all_tags, array $since_tags, int $comment_start, string $entity ): void {
+	private function check_grouping( array $all_tags, array $since_tags, int $comment_start, string $entity ): bool {
 		if ( count( $since_tags ) <= 1 ) {
-			return;
+			return true;
 		}
 
 		if ( $this->are_indices_contiguous( array_keys( $since_tags ), $all_tags ) ) {
-			return;
+			return true;
 		}
 
 		// Anchor on the first non-@since tag that sits between two @since tags — the actually-misplaced line.
@@ -282,6 +300,68 @@ final class SinceTagSniff extends Sniff {
 		);
 		if ( true === $fix ) {
 			$this->reorder_tags_with_since_first( $comment_start );
+		}
+		return false;
+	}
+
+	/**
+	 * Ensure a blank docblock line separates the @since header group from the parameter/return group.
+	 *
+	 * The "header group" is the run of HEADER_GROUP_TAGS starting at the first @since (matches the
+	 * WordPress canonical layout where @since/@deprecated/@see/@link/@global form one block).
+	 *
+	 * @param array<int, array<string, mixed>> $all_tags      All tags keyed by stack pointer, in order.
+	 * @param array<int, array<string, mixed>> $since_tags    @since tags keyed by stack pointer.
+	 * @param int                              $comment_start Pointer to T_DOC_COMMENT_OPEN_TAG.
+	 * @param string                           $entity        Entity label.
+	 */
+	private function check_blank_line_after_group( array $all_tags, array $since_tags, int $comment_start, string $entity ): void {
+		$tokens          = $this->phpcsFile->getTokens();
+		$first_since_ptr = reset( $since_tags )['tag'];
+
+		// Find the first tag after the first @since whose name is not in the header group.
+		$next_tag_ptr = null;
+		$past_first   = false;
+		foreach ( $all_tags as $tag_ptr => $tag ) {
+			if ( $tag_ptr === $first_since_ptr ) {
+				$past_first = true;
+				continue;
+			}
+			if ( ! $past_first ) {
+				continue;
+			}
+			if ( ! in_array( $tag['content'], self::HEADER_GROUP_TAGS, true ) ) {
+				$next_tag_ptr = $tag_ptr;
+				break;
+			}
+		}
+
+		if ( null === $next_tag_ptr ) {
+			return;
+		}
+
+		$next_tag_line = $tokens[ $next_tag_ptr ]['line'];
+
+		// Find the previous content token (string or tag); stars and whitespace don't count as content.
+		$prev = $this->phpcsFile->findPrevious(
+			array( \T_DOC_COMMENT_WHITESPACE, \T_DOC_COMMENT_STAR ),
+			$next_tag_ptr - 1,
+			$comment_start,
+			true
+		);
+
+		if ( false === $prev || ( $next_tag_line - 1 ) !== $tokens[ $prev ]['line'] ) {
+			return;
+		}
+
+		$fix = $this->phpcsFile->addFixableWarning(
+			'Missing empty line after @since group for %s.',
+			$next_tag_ptr,
+			'MissingEmptyLineAfter',
+			array( $entity )
+		);
+		if ( true === $fix ) {
+			$this->fix_missing_empty_line( $next_tag_ptr );
 		}
 	}
 
