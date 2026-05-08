@@ -23,7 +23,7 @@ All scripts go through Composer. Run from the repo root:
 
 Sniffs live under [NilambarCodingStandard/Sniffs/](NilambarCodingStandard/Sniffs/), grouped into four categories that mirror the ruleset references: `CodeAnalysis/`, `Commenting/`, `Language/`, `Security/`. Each `*Sniff.php` is registered in [NilambarCodingStandard/ruleset.xml](NilambarCodingStandard/ruleset.xml) — adding a new sniff requires both the class and the `<rule ref>` entry, otherwise it won't ship to consumers.
 
-Most sniffs extend `WordPressCS\WordPress\Sniff` (or `AbstractFunctionParameterSniff` for function-parameter checks). For more complex token-walking logic, extend [NilambarCodingStandard/Helpers/AbstractSniffHelper.php](NilambarCodingStandard/Helpers/AbstractSniffHelper.php) — it provides shared helpers for variable/expression parsing, scope detection, ternary/conditional checks, and assignment tracking. Reuse those helpers rather than reimplementing token traversal.
+Most sniffs extend `WordPressCS\WordPress\Sniff` (or `AbstractFunctionParameterSniff` for function-parameter checks). Shared traits live in [NilambarCodingStandard/Helpers/](NilambarCodingStandard/Helpers/) — e.g. `CommentTrait` and `EntityTrait` used by `Commenting/SinceTagSniff`.
 
 ### Test harness
 
