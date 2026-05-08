@@ -11,7 +11,7 @@ This package is a PHP_CodeSniffer standard (`phpcodesniffer-standard` Composer t
 All scripts go through Composer. Run from the repo root:
 
 - `composer test` — PHPUnit suite for the sniffs. Filters down to `NilambarCodingStandard` and runs against PHPCS's `AllTests.php` harness (see [phpunit.xml.dist](phpunit.xml.dist) and [Tests/bootstrap.php](Tests/bootstrap.php)).
-- `composer test -- --filter HeredocUnitTest` — run a single sniff's unit test (pass any PHPUnit `--filter` pattern after `--`).
+- `composer test -- --filter SinceTagUnitTest` — run a single sniff's unit test (pass any PHPUnit `--filter` pattern after `--`).
 - `composer phpcs` — lint this repo's own PHP using [phpcs.xml.dist](phpcs.xml.dist) (WordPress + selected Slevomat rules).
 - `composer format` — auto-fix with `phpcbf`.
 - `composer lint` — runs `lint-php` (parallel-lint syntax check) followed by `phpcs`.
