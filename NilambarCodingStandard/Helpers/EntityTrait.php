@@ -17,55 +17,54 @@ use PHP_CodeSniffer\Files\File;
 trait EntityTrait {
 
 	/**
-	 * Get entity name.
+	 * Get a human-readable label for the entity at the given token position.
+	 *
+	 * Returns labels in the form "function foo()", "class Foo", "property $bar", etc.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param File $phpcsFile The PHP_CodeSniffer file where the token was found.
 	 * @param int  $stackPtr  Current position.
-	 * @return string Entity name.
+	 * @return string Entity label.
 	 */
 	protected function get_entity_name( File $phpcsFile, int $stackPtr ): string {
 		$tokens = $phpcsFile->getTokens();
-
-		$suffix = $this->get_suffix( $tokens[ $stackPtr ]['code'] );
-
-		if ( \T_CONST === $tokens[ $stackPtr ]['code'] ) {
-			return $tokens[ $stackPtr + 2 ]['content'] . $suffix;
-		}
-
-		return $phpcsFile->getDeclarationName( $stackPtr ) . $suffix;
-	}
-
-	/**
-	 * Get element suffix.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int $code Code for current element.
-	 * @return string Suffix text.
-	 */
-	private function get_suffix( int $code ): string {
-		$suffix = '';
+		$code   = $tokens[ $stackPtr ]['code'];
 
 		switch ( $code ) {
 			case \T_FUNCTION:
-				$suffix = '() function';
-				break;
+				$name = $phpcsFile->getDeclarationName( $stackPtr );
+				return 'function ' . ( null !== $name ? $name : '' ) . '()';
+
 			case \T_CLASS:
-				$suffix = ' class';
-				break;
+				return 'class ' . (string) $phpcsFile->getDeclarationName( $stackPtr );
+
 			case \T_INTERFACE:
-				$suffix = ' interface';
-				break;
+				return 'interface ' . (string) $phpcsFile->getDeclarationName( $stackPtr );
+
 			case \T_TRAIT:
-				$suffix = ' trait';
-				break;
+				return 'trait ' . (string) $phpcsFile->getDeclarationName( $stackPtr );
+
 			case \T_CONST:
-				$suffix = ' constant';
-				break;
+				$name_ptr = $phpcsFile->findNext( \T_STRING, $stackPtr + 1 );
+				$name     = ( false !== $name_ptr ) ? $tokens[ $name_ptr ]['content'] : '';
+				return 'constant ' . $name;
+
+			case \T_VARIABLE:
+				return 'property ' . $tokens[ $stackPtr ]['content'];
 		}
 
-		return $suffix;
+		// Enums and enum cases (PHP 8.1+). Token codes resolved via constant lookup so PHP 7.4 is happy.
+		if ( defined( 'T_ENUM' ) && \T_ENUM === $code ) {
+			return 'enum ' . (string) $phpcsFile->getDeclarationName( $stackPtr );
+		}
+
+		if ( defined( 'T_ENUM_CASE' ) && \T_ENUM_CASE === $code ) {
+			$name_ptr = $phpcsFile->findNext( \T_STRING, $stackPtr + 1 );
+			$name     = ( false !== $name_ptr ) ? $tokens[ $name_ptr ]['content'] : '';
+			return 'enum case ' . $name;
+		}
+
+		return '';
 	}
 }
