@@ -73,8 +73,8 @@ function function_four() {
 /**
  * Function five.
  *
- * @see text
  * @since 1.0.0
+ * @see text
  */
 function function_five() {
 }
@@ -101,8 +101,8 @@ function function_seven() {
  * Function.
  *
  * @since 1.0.0
- * @see link
  * @since 2.0.0 New feature
+ * @see link
  */
 function function_eight() {
 }
@@ -168,8 +168,8 @@ function function_fifteen() {
 /**
  * Function with @since tag not as first tag.
  *
- * @param string $name
  * @since 1.0.0
+ * @param string $name
  */
 function function_eighteen() {
 }
@@ -178,8 +178,8 @@ function function_eighteen() {
  * Function with multiple @since tags separated by other tags.
  *
  * @since 1.0.0
- * @param int $id
  * @since 2.0.0
+ * @param int $id
  */
 function function_twenty() {
 }
@@ -230,6 +230,7 @@ function function_twenty_eight() {
 
 /**
  * Function with @since tag missing empty line before it.
+ *
  * @since 1.0.0
  */
 function function_missing_empty_line() {
@@ -237,6 +238,7 @@ function function_missing_empty_line() {
 
 /**
  * Function with @since tag and other tags, missing empty line before @since.
+ *
  * @since 1.0.0
  * @param string $name
  * @return void

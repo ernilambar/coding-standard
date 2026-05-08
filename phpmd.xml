@@ -30,7 +30,7 @@
 
 	<rule ref="rulesets/codesize.xml/ExcessiveClassComplexity">
 		<properties>
-			<property name="minimum" value="60" />
+			<property name="maximum" value="60" />
 		</properties>
 	</rule>
 

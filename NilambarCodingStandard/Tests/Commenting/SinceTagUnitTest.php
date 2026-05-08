@@ -32,7 +32,7 @@ final class SinceTagUnitTest extends AbstractSniffUnitTest {
 			49  => 1,
 			94  => 1,
 			95  => 1,
-			103 => 1,
+			104 => 1,
 			116 => 1,
 			122 => 1,
 			131 => 1,
@@ -40,7 +40,8 @@ final class SinceTagUnitTest extends AbstractSniffUnitTest {
 			147 => 1,
 			155 => 1,
 			163 => 1,
-			180 => 1,
+			181 => 1,
+			306 => 1,
 		);
 	}
 
@@ -53,8 +54,9 @@ final class SinceTagUnitTest extends AbstractSniffUnitTest {
 		return array(
 			77  => 1,
 			172 => 1,
-			235 => 1,
-			244 => 1,
+			233 => 1,
+			240 => 1,
+			315 => 1,
 		);
 	}
 
