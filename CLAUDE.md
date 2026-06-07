@@ -15,7 +15,6 @@ All scripts go through Composer. Run from the repo root:
 - `composer phpcs` — lint this repo's own PHP using [phpcs.xml.dist](phpcs.xml.dist) (WordPress + selected Slevomat rules).
 - `composer format` — auto-fix with `phpcbf`.
 - `composer lint` — runs `lint-php` (parallel-lint syntax check) followed by `phpcs`.
-- `composer phpmd` — mess detector against [phpmd.xml](phpmd.xml).
 
 ## Architecture
 
