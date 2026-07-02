@@ -32,7 +32,6 @@ Or run directly:
 | `CodeAnalysis.RestrictedConstants` | Flags restricted `define()` variables |
 | `Commenting.AllCapsComment` | Flags inline comments written in ALL CAPS |
 | `Commenting.SinceTag` | Enforces `@since` tag presence and format in PHPDoc |
-| `Language.I18nFunctionParameters` | Flags incorrect i18n function parameter usage |
 
 ## Requirements
 
