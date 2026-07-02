@@ -28,24 +28,35 @@ trait CommentTrait {
 	protected function find_doc_block_opener( File $phpcsFile, int $stackPtr ): ?int {
 		$tokens = $phpcsFile->getTokens();
 
-		// Move backwards over modifiers/whitespace/inline-comments to find the previous significant token.
-		$prev_token_pos = $phpcsFile->findPrevious(
-			array(
-				\T_ABSTRACT,
-				\T_COMMENT,
-				\T_FINAL,
-				\T_PRIVATE,
-				\T_PROTECTED,
-				\T_PUBLIC,
-				\T_READONLY,
-				\T_STATIC,
-				\T_VAR,
-				\T_WHITESPACE,
-			),
-			$stackPtr - 1,
-			null,
-			true
+		$skip_tokens = array(
+			\T_ABSTRACT,
+			\T_COMMENT,
+			\T_FINAL,
+			\T_PRIVATE,
+			\T_PROTECTED,
+			\T_PUBLIC,
+			\T_READONLY,
+			\T_STATIC,
+			\T_VAR,
+			\T_WHITESPACE,
 		);
+
+		// Move backwards over modifiers/whitespace/inline-comments to find the previous significant token.
+		// PHP 8 attributes can sit between the docblock and the declaration; jump over whole #[...] ranges.
+		$search_from = $stackPtr - 1;
+		do {
+			$prev_token_pos = $phpcsFile->findPrevious( $skip_tokens, $search_from, null, true );
+
+			if ( false !== $prev_token_pos
+				&& \T_ATTRIBUTE_END === $tokens[ $prev_token_pos ]['code']
+				&& isset( $tokens[ $prev_token_pos ]['attribute_opener'] )
+			) {
+				$search_from = $tokens[ $prev_token_pos ]['attribute_opener'] - 1;
+				continue;
+			}
+
+			break;
+		} while ( true );
 
 		if ( false === $prev_token_pos
 			|| \T_DOC_COMMENT_CLOSE_TAG !== $tokens[ $prev_token_pos ]['code']

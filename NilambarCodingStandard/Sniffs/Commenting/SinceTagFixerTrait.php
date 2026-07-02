@@ -45,7 +45,7 @@ trait SinceTagFixerTrait {
 		}
 
 		$this->phpcsFile->fixer->beginChangeset();
-		$this->phpcsFile->fixer->addContentBefore( $star_ptr, "*\n" . $indent );
+		$this->phpcsFile->fixer->addContentBefore( $star_ptr, '*' . $this->phpcsFile->eolChar . $indent );
 		$this->phpcsFile->fixer->endChangeset();
 	}
 
@@ -110,10 +110,11 @@ trait SinceTagFixerTrait {
 
 		for ( $i = $comment_start; $i <= $comment_end; $i++ ) {
 			$current_line = $tokens[ $i ]['line'];
+			// Strip the CR half of CRLF pairs; assemble_doc_block() re-adds the file's own EOL.
 			foreach ( explode( "\n", $tokens[ $i ]['content'] ) as $idx => $piece ) {
 				$target_line = $current_line + $idx;
 				if ( isset( $lines[ $target_line ] ) ) {
-					$lines[ $target_line ]['text'] .= $piece;
+					$lines[ $target_line ]['text'] .= rtrim( $piece, "\r" );
 				}
 			}
 		}
@@ -222,6 +223,6 @@ trait SinceTagFixerTrait {
 		}
 		$body[] = $close_line;
 
-		return implode( "\n", $body );
+		return implode( $this->phpcsFile->eolChar, $body );
 	}
 }
