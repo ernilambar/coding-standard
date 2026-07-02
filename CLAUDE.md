@@ -20,7 +20,7 @@ All scripts go through Composer. Run from the repo root:
 
 ### Sniff organization
 
-Sniffs live under [NilambarCodingStandard/Sniffs/](NilambarCodingStandard/Sniffs/), grouped into four categories that mirror the ruleset references: `CodeAnalysis/`, `Commenting/`, `Language/`, `Security/`. Each `*Sniff.php` is registered in [NilambarCodingStandard/ruleset.xml](NilambarCodingStandard/ruleset.xml) — adding a new sniff requires both the class and the `<rule ref>` entry, otherwise it won't ship to consumers.
+Sniffs live under [NilambarCodingStandard/Sniffs/](NilambarCodingStandard/Sniffs/), grouped into categories that mirror the ruleset references: `CodeAnalysis/`, `Commenting/`. Each `*Sniff.php` is registered in [NilambarCodingStandard/ruleset.xml](NilambarCodingStandard/ruleset.xml) — adding a new sniff requires both the class and the `<rule ref>` entry, otherwise it won't ship to consumers.
 
 Most sniffs extend `WordPressCS\WordPress\Sniff` (or `AbstractFunctionParameterSniff` for function-parameter checks). Shared traits live in [NilambarCodingStandard/Helpers/](NilambarCodingStandard/Helpers/) — e.g. `CommentTrait` and `EntityTrait` used by `Commenting/SinceTagSniff`.
 
@@ -32,10 +32,6 @@ The PHPCS-style fixture pattern is enforced:
 - Test classes extend [NilambarCodingStandard/Tests/AbstractSniffUnitTest.php](NilambarCodingStandard/Tests/AbstractSniffUnitTest.php), which wraps PHPCS's `AbstractSniffUnitTest`. The wrapper exists because the upstream harness does not apply sniff properties from `ruleset.xml`; subclasses must implement `get_sniff_fqcn()` and `set_sniff_parameters()` so per-test ruleset properties take effect.
 - `getErrorList()` / `getWarningList()` return `<line number> => <count>` arrays describing expected violations in the `.inc` fixture.
 - The bootstrap in [Tests/bootstrap.php](Tests/bootstrap.php) sets `PHPCS_IGNORE_TESTS` to disable every standard except `NilambarCodingStandard`, so cross-standard fixtures don't pollute results.
-
-### Data files
-
-[data/i18n/](data/i18n/) contains generated lists (`admin.php`, `core.php`) of WordPress functions whose user-facing parameters require translation — consumed by `Language/I18nFunctionParametersSniff`. Treat these as data, not source: the `phpcs.xml.dist` excludes them from linting.
 
 ## Conventions enforced on this repo's own code
 
