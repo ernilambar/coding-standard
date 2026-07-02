@@ -389,3 +389,20 @@ function function_no_blank_after_deprecated( $name ) {
  */
 function function_no_blank_after_multiline_since( $id ) {
 }
+
+/**
+ * Function with attribute, missing @since.
+ */
+#[My_Attribute]
+function function_attribute_missing_since() {
+}
+
+/**
+ * Function with attribute and @since.
+ *
+ * @since 1.0.0
+ */
+#[My_Attribute( 'name' )]
+#[Another_Attribute]
+function function_attribute_with_since() {
+}
