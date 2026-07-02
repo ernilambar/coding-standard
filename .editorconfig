@@ -1,6 +1,3 @@
-# WordPress Coding Standards
-# https://developer.wordpress.org/coding-standards/wordpress-coding-standards/
-
 root = true
 
 [*]
@@ -25,20 +22,7 @@ insert_final_newline = false
 indent_style = space
 indent_size = 2
 
-[.*rc]
-insert_final_newline = false
-indent_style = space
-indent_size = 2
-
-[*.feature]
-insert_final_newline = false
-indent_style = space
-indent_size = 2
-
 [*.yml]
 insert_final_newline = false
 indent_style = space
 indent_size = 2
-
-[.github/CODEOWNERS]
-indent_style = space
