@@ -10,22 +10,30 @@ namespace NilambarCodingStandard\Sniffs\Commenting;
 use Exception;
 use NilambarCodingStandard\Helpers\CommentTrait;
 use NilambarCodingStandard\Helpers\EntityTrait;
-use WordPressCS\WordPress\Sniff;
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 
 /**
  * Detect since tag in PHPDoc.
  *
  * @since 1.0.0
  */
-final class SinceTagSniff extends Sniff {
+final class SinceTagSniff implements Sniff {
 
 	use CommentTrait;
 	use EntityTrait;
 	use SinceTagFixerTrait;
 
 	/**
-	 * Tags that share the @since header group. WordPress documents these as a single
-	 * block (no internal blank lines), separated from @param/@return by one blank line.
+	 * The file being scanned.
+	 *
+	 * @var File
+	 */
+	protected File $phpcsFile;
+
+	/**
+	 * Tags that share the @since header group, documented as a single block
+	 * (no internal blank lines), separated from @param/@return by one blank line.
 	 *
 	 * @var string[]
 	 */
@@ -68,11 +76,13 @@ final class SinceTagSniff extends Sniff {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $stackPtr The position of the current token in the stack.
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The position of the current token in the stack.
 	 * @return void
 	 */
-	public function process_token( $stackPtr ) {
-		$tokens = $this->phpcsFile->getTokens();
+	public function process( File $phpcsFile, $stackPtr ) {
+		$this->phpcsFile = $phpcsFile;
+		$tokens          = $this->phpcsFile->getTokens();
 		$code   = $tokens[ $stackPtr ]['code'];
 
 		// Skip closures and anonymous functions: getDeclarationName returns null when no name is present.
@@ -307,8 +317,8 @@ final class SinceTagSniff extends Sniff {
 	/**
 	 * Ensure a blank docblock line separates the @since header group from the parameter/return group.
 	 *
-	 * The "header group" is the run of HEADER_GROUP_TAGS starting at the first @since (matches the
-	 * WordPress canonical layout where @since/@deprecated/@see/@link/@global form one block).
+	 * The "header group" is the run of HEADER_GROUP_TAGS starting at the first @since
+	 * (@since/@deprecated/@see/@link/@global form one block).
 	 *
 	 * @param array<int, array<string, mixed>> $all_tags      All tags keyed by stack pointer, in order.
 	 * @param array<int, array<string, mixed>> $since_tags    @since tags keyed by stack pointer.

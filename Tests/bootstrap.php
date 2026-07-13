@@ -43,7 +43,6 @@ foreach ( $available_standards as $available_standard ) {
 
 $ignore_standards_string = implode( ',', $ignored_standards );
 
-// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration_putenv -- This is non-production code.
 putenv( "PHPCS_IGNORE_TESTS={$ignore_standards_string}" );
 
 // Cleanup.
