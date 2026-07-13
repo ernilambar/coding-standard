@@ -7,14 +7,15 @@
 
 namespace NilambarCodingStandard\Sniffs\Commenting;
 
-use WordPressCS\WordPress\Sniff;
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 
 /**
  * Detects comment in all capital letters.
  *
  * @since 1.0.0
  */
-final class AllCapsCommentSniff extends Sniff {
+final class AllCapsCommentSniff implements Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -33,11 +34,13 @@ final class AllCapsCommentSniff extends Sniff {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $stackPtr The position of the current token in the stack.
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The position of the current token in the stack.
 	 * @return int|void Integer stack pointer to skip forward or void to continue normal file processing.
 	 */
-	public function process_token( $stackPtr ) {
-		$content = $this->tokens[ $stackPtr ]['content'];
+	public function process( File $phpcsFile, $stackPtr ) {
+		$tokens  = $phpcsFile->getTokens();
+		$content = $tokens[ $stackPtr ]['content'];
 
 		// Split multi-line comments into lines.
 		$lines = preg_split( '/\R/', $content );
@@ -54,7 +57,7 @@ final class AllCapsCommentSniff extends Sniff {
 
 			// Only check lines with at least one letter.
 			if ( preg_match( '/[a-z]/i', $line ) && strtoupper( $line ) === $line ) {
-				$this->phpcsFile->addWarning(
+				$phpcsFile->addWarning(
 					'Avoid using all capital letters in comments.',
 					$stackPtr,
 					'Found'

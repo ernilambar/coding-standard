@@ -18,11 +18,10 @@
 	<!-- For CI, don't fail on warnings -->
 	<config name="ignore_warnings_on_exit" value="1"/>
 
-	<!-- SET UP THE RULESETS -->
-	<rule ref="WordPress">
-		<!-- This project needs to comply with naming standards from PHPCS, not WP. -->
-		<exclude name="WordPress.Files.FileName"/>
-		<exclude name="WordPress.NamingConventions.ValidVariableName"/>
+	<config name="testVersion" value="7.4-"/>
+	<rule ref="PHPCompatibility">
+		<!-- T_ENUM and T_READONLY are PHPCS token constants, not PHP native constants. -->
+		<exclude name="PHPCompatibility.Constants.NewConstants"/>
 	</rule>
 
 	<rule ref="Squiz.Commenting.FunctionCommentThrowTag.Missing">

@@ -10,7 +10,7 @@ namespace NilambarCodingStandard\Sniffs\Commenting;
 /**
  * Autofix machinery for SinceTagSniff. Lives in its own trait so the host sniff stays focused on detection.
  *
- * Consumers must expose `protected $phpcsFile;` (PHP_CodeSniffer\Files\File), as `WordPressCS\WordPress\Sniff` does.
+ * Consumers must expose `protected $phpcsFile;` (PHP_CodeSniffer\Files\File).
  *
  * @since 1.0.0
  */
