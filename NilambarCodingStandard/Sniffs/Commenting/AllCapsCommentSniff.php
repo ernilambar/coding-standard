@@ -20,6 +20,8 @@ final class AllCapsCommentSniff implements Sniff {
 	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
+	 * @since 1.0.0
+	 *
 	 * @return array
 	 */
 	public function register() {

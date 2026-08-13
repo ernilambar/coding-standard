@@ -50,6 +50,37 @@ trait SinceTagFixerTrait {
 	}
 
 	/**
+	 * Remove the blank docblock line(s) directly before the given tag.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $tag_ptr Stack pointer to the tag that follows the blank line(s).
+	 */
+	private function remove_blank_line_before( int $tag_ptr ): void {
+		$tokens   = $this->phpcsFile->getTokens();
+		$tag_line = $tokens[ $tag_ptr ]['line'];
+
+		$prev = $this->phpcsFile->findPrevious(
+			array( \T_DOC_COMMENT_WHITESPACE, \T_DOC_COMMENT_STAR ),
+			$tag_ptr - 1,
+			null,
+			true
+		);
+		if ( false === $prev ) {
+			return;
+		}
+		$prev_line = $tokens[ $prev ]['line'];
+
+		$this->phpcsFile->fixer->beginChangeset();
+		for ( $i = $prev + 1; $i < $tag_ptr; $i++ ) {
+			if ( $tokens[ $i ]['line'] > $prev_line && $tokens[ $i ]['line'] < $tag_line ) {
+				$this->phpcsFile->fixer->replaceToken( $i, '' );
+			}
+		}
+		$this->phpcsFile->fixer->endChangeset();
+	}
+
+	/**
 	 * Reorder docblock so every @since tag (and its multi-line continuation) sits at the top of the tag block.
 	 *
 	 * Operates on whole logical lines: each tag, plus every following continuation line that does not itself
@@ -129,7 +160,7 @@ trait SinceTagFixerTrait {
 				continue;
 			}
 			$lines[ $tag_line ]['is_tag']   = true;
-			$lines[ $tag_line ]['is_since'] = ( '@since' === $tokens[ $tag_ptr ]['content'] );
+			$lines[ $tag_line ]['is_since'] = ( 0 === strcasecmp( $tokens[ $tag_ptr ]['content'], '@since' ) );
 		}
 
 		return $lines;

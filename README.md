@@ -5,7 +5,6 @@ PHP_CodeSniffer standard for PHP projects.
 ## Requirements
 
 - PHP 7.4+
-- `squizlabs/php_codesniffer` ^3.13 or ^4.0
 
 ## Installation
 

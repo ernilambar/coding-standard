@@ -11,11 +11,15 @@ use NilambarCodingStandard\Tests\AbstractSniffUnitTest;
 
 /**
  * Unit tests for AllCapsCommentSniff.
+ *
+ * @since 1.0.0
  */
 final class AllCapsCommentUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
+	 *
+	 * @since 1.0.0
 	 *
 	 * @return array<int, array<int, string>>
 	 */
@@ -25,6 +29,8 @@ final class AllCapsCommentUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where warnings should occur.
+	 *
+	 * @since 1.0.0
 	 *
 	 * @return array<int, array<int, string>>
 	 */

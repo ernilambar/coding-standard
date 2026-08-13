@@ -11,11 +11,15 @@ use NilambarCodingStandard\Tests\AbstractSniffUnitTest;
 
 /**
  * Unit tests for SinceTagSniff.
+ *
+ * @since 1.0.0
  */
 final class SinceTagUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
+	 *
+	 * @since 1.0.0
 	 *
 	 * @return array<int, array<int, string>>
 	 */
@@ -41,11 +45,15 @@ final class SinceTagUnitTest extends AbstractSniffUnitTest {
 			181 => 1,
 			306 => 1,
 			397 => 1,
+			423 => 1,
+			431 => 1,
 		);
 	}
 
 	/**
 	 * Returns the lines where warnings should occur.
+	 *
+	 * @since 1.0.0
 	 *
 	 * @return array<int, array<int, string>>
 	 */
