@@ -46,7 +46,8 @@ trait EntityTrait {
 				return 'trait ' . (string) $phpcsFile->getDeclarationName( $stackPtr );
 
 			case \T_CONST:
-				$name_ptr = $phpcsFile->findNext( \T_STRING, $stackPtr + 1 );
+				$end      = $phpcsFile->findNext( array( \T_EQUAL, \T_SEMICOLON ), $stackPtr + 1 );
+				$name_ptr = $phpcsFile->findPrevious( \T_STRING, ( false !== $end ? $end - 1 : $stackPtr + 1 ), $stackPtr );
 				$name     = ( false !== $name_ptr ) ? $tokens[ $name_ptr ]['content'] : '';
 				return 'constant ' . $name;
 

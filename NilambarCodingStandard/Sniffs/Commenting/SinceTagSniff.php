@@ -35,6 +35,8 @@ final class SinceTagSniff implements Sniff {
 	 * Tags that share the @since header group, documented as a single block
 	 * (no internal blank lines), separated from @param/@return by one blank line.
 	 *
+	 * @since 1.0.0
+	 *
 	 * @var string[]
 	 */
 	private const HEADER_GROUP_TAGS = array(
@@ -47,6 +49,8 @@ final class SinceTagSniff implements Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
+	 *
+	 * @since 1.0.0
 	 *
 	 * @return array
 	 */
@@ -140,6 +144,8 @@ final class SinceTagSniff implements Sniff {
 	/**
 	 * Collect every @-tag in the docblock as an array of token records keyed by stack pointer.
 	 *
+	 * @since 1.0.0
+	 *
 	 * @param int $comment_start Pointer to the T_DOC_COMMENT_OPEN_TAG.
 	 * @return array<int, array<string, mixed>> Tags keyed by their stack pointer, ordered as they appear.
 	 */
@@ -156,6 +162,7 @@ final class SinceTagSniff implements Sniff {
 			}
 			$tag                = $tokens[ $tag_ptr ];
 			$tag['tag']         = $tag_ptr;
+			$tag['content']     = strtolower( $tag['content'] );
 			$result[ $tag_ptr ] = $tag;
 		}
 
@@ -164,6 +171,8 @@ final class SinceTagSniff implements Sniff {
 
 	/**
 	 * Check whether @since is the first tag, and whether an empty docblock line precedes it.
+	 *
+	 * @since 1.0.0
 	 *
 	 * @param array<int, array<string, mixed>> $all_tags      All tags keyed by stack pointer.
 	 * @param array<int, array<string, mixed>> $since_tags    @since tags keyed by stack pointer.
@@ -220,6 +229,8 @@ final class SinceTagSniff implements Sniff {
 	/**
 	 * Validate the version on every @since tag and report missing/invalid versions.
 	 *
+	 * @since 1.0.0
+	 *
 	 * @param array<int, array<string, mixed>> $since_tags @since tags keyed by stack pointer.
 	 * @param array<int, array<string, mixed>> $tokens     PHPCS token stack.
 	 * @param string                           $entity     Entity label.
@@ -260,6 +271,8 @@ final class SinceTagSniff implements Sniff {
 	/**
 	 * Warn when the same @since version appears more than once on a single entity.
 	 *
+	 * @since 1.0.0
+	 *
 	 * @param array<int, array<string, mixed>> $since_tags     @since tags keyed by stack pointer.
 	 * @param array<int, string>               $valid_versions Validated versions keyed by stack pointer.
 	 * @param string                           $entity         Entity label.
@@ -284,6 +297,8 @@ final class SinceTagSniff implements Sniff {
 	/**
 	 * Ensure all @since tags are consecutive within the tag block.
 	 *
+	 * @since 1.0.0
+	 *
 	 * @param array<int, array<string, mixed>> $all_tags      All tags keyed by stack pointer.
 	 * @param array<int, array<string, mixed>> $since_tags    @since tags keyed by stack pointer.
 	 * @param int                              $comment_start Pointer to T_DOC_COMMENT_OPEN_TAG.
@@ -296,6 +311,7 @@ final class SinceTagSniff implements Sniff {
 		}
 
 		if ( $this->are_indices_contiguous( array_keys( $since_tags ), $all_tags ) ) {
+			$this->check_since_adjacency( $since_tags, $comment_start, $entity );
 			return true;
 		}
 
@@ -315,10 +331,52 @@ final class SinceTagSniff implements Sniff {
 	}
 
 	/**
+	 * Ensure consecutive @since tags have no blank docblock line between them.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array<int, array<string, mixed>> $since_tags    @since tags keyed by stack pointer, in order.
+	 * @param int                              $comment_start Pointer to T_DOC_COMMENT_OPEN_TAG.
+	 * @param string                           $entity        Entity label.
+	 */
+	private function check_since_adjacency( array $since_tags, int $comment_start, string $entity ): void {
+		$tokens = $this->phpcsFile->getTokens();
+		$keys   = array_keys( $since_tags );
+
+		for ( $i = 1, $count = count( $keys ); $i < $count; $i++ ) {
+			$tag_ptr  = $keys[ $i ];
+			$tag_line = $tokens[ $tag_ptr ]['line'];
+
+			$prev = $this->phpcsFile->findPrevious(
+				array( \T_DOC_COMMENT_WHITESPACE, \T_DOC_COMMENT_STAR ),
+				$tag_ptr - 1,
+				$comment_start,
+				true
+			);
+
+			if ( false === $prev || ( $tag_line - 1 ) === $tokens[ $prev ]['line'] ) {
+				continue;
+			}
+
+			$fix = $this->phpcsFile->addFixableError(
+				'Multiple @since tags must not be separated by a blank line in %s.',
+				$tag_ptr,
+				'BlankLineBetween',
+				array( $entity )
+			);
+			if ( true === $fix ) {
+				$this->remove_blank_line_before( $tag_ptr );
+			}
+		}
+	}
+
+	/**
 	 * Ensure a blank docblock line separates the @since header group from the parameter/return group.
 	 *
 	 * The "header group" is the run of HEADER_GROUP_TAGS starting at the first @since
 	 * (@since/@deprecated/@see/@link/@global form one block).
+	 *
+	 * @since 1.0.0
 	 *
 	 * @param array<int, array<string, mixed>> $all_tags      All tags keyed by stack pointer, in order.
 	 * @param array<int, array<string, mixed>> $since_tags    @since tags keyed by stack pointer.
@@ -378,6 +436,8 @@ final class SinceTagSniff implements Sniff {
 	/**
 	 * Determine whether the @since tags appear as a single contiguous run in the overall tag list.
 	 *
+	 * @since 1.0.0
+	 *
 	 * @param array<int, int>                  $since_keys Keys (stack pointers) of @since tags, in order.
 	 * @param array<int, array<string, mixed>> $all_tags   All tags keyed by stack pointer, in order.
 	 * @return bool True if every tag between the first and last @since is itself an @since.
@@ -397,6 +457,8 @@ final class SinceTagSniff implements Sniff {
 
 	/**
 	 * Find the first non-@since tag that sits between two @since tags.
+	 *
+	 * @since 1.0.0
 	 *
 	 * @param array<int, array<string, mixed>> $all_tags   All tags keyed by stack pointer, in order.
 	 * @param array<int, array<string, mixed>> $since_tags @since tags keyed by stack pointer.
@@ -427,7 +489,11 @@ final class SinceTagSniff implements Sniff {
 	/**
 	 * Determine whether the docblock starting at $comment_start contains an inheritDoc directive.
 	 *
-	 * Matches `@inheritDoc` as a standalone tag and `{@inheritDoc}` inside any comment-text line, case-insensitive.
+	 * Matches @inheritDoc as a standalone tag and {@inheritDoc} inside any comment-text line, case-insensitive.
+	 * Occurrences wrapped in backticks are treated as documentation prose, not a real directive, so this sniff's
+	 * own docblocks can describe the syntax without triggering a false match on themselves.
+	 *
+	 * @since 1.0.0
 	 *
 	 * @param int $comment_start Pointer to T_DOC_COMMENT_OPEN_TAG.
 	 * @return bool True when an inheritDoc directive is present.
@@ -448,8 +514,11 @@ final class SinceTagSniff implements Sniff {
 				return true;
 			}
 
-			if ( \T_DOC_COMMENT_STRING === $code && false !== stripos( $content, '{@inheritDoc}' ) ) {
-				return true;
+			if ( \T_DOC_COMMENT_STRING === $code ) {
+				$prose = preg_replace( '/`[^`]*`/', '', $content );
+				if ( false !== stripos( $prose, '{@inheritDoc}' ) ) {
+					return true;
+				}
 			}
 		}
 
@@ -458,6 +527,8 @@ final class SinceTagSniff implements Sniff {
 
 	/**
 	 * Determine whether the T_VARIABLE at $stackPtr is a class/trait property.
+	 *
+	 * @since 1.0.0
 	 *
 	 * @param int $stackPtr Stack pointer to the T_VARIABLE token.
 	 * @return bool True when the variable is a class/trait property declaration.
@@ -477,6 +548,8 @@ final class SinceTagSniff implements Sniff {
 	 * Supported formats are intentionally narrow: `x.x` and `x.x.x` only. Pre-release suffixes
 	 * (`1.0.0-rc1`), single-segment versions (`1`), and historical WP tokens (`MU (3.0.0)`,
 	 * `Unknown`) are deliberately rejected — broaden the regex only with an explicit decision.
+	 *
+	 * @since 1.0.0
 	 *
 	 * @param array<string, mixed>             $tag    Tag record (must contain `tag` => stack pointer).
 	 * @param array<int, array<string, mixed>> $tokens PHPCS token stack.

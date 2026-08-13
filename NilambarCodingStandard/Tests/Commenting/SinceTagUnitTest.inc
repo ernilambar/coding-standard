@@ -406,3 +406,27 @@ function function_attribute_missing_since() {
 #[Another_Attribute]
 function function_attribute_with_since() {
 }
+
+/**
+ * Function with case-insensitive @Since tag (must not report Missing).
+ *
+ * @Since 1.0.0
+ */
+function function_case_insensitive_since() {
+}
+
+/**
+ * Function with multiple @since tags separated by a blank line.
+ *
+ * @since 1.0.0
+ *
+ * @since 2.0.0
+ */
+function function_since_blank_line_between() {
+}
+
+/**
+ * Function mentioning `@inheritDoc` and `{@inheritDoc}` as backtick-quoted prose, not a real directive.
+ */
+function function_inherit_doc_mentioned_in_prose() {
+}
